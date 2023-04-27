@@ -10,18 +10,18 @@ import { FormStepper } from "../../common/FormStepper";
 import { FormContext } from "../../common/FormWizard";
 import { RoundDetailForm } from "../RoundDetailForm";
 
-jest.mock("../../common/Auth");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../common/Auth");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
 beforeEach(() => {
-  (useWallet as jest.Mock).mockReturnValue({
+  (useWallet as Mock).mockReturnValue({
     chain: { id: ChainId.GOERLI_CHAIN_ID },
   });
 });
@@ -284,8 +284,8 @@ describe("<RoundDetailForm />", () => {
     const applicationsEndTime = faker.date.soon(10, applicationsStartTime);
     const roundStartTime = faker.date.future(1, applicationsEndTime);
     const roundEndTime = faker.date.soon(21, roundStartTime);
-    const setCurrentStep = jest.fn();
-    const setFormData = jest.fn();
+    const setCurrentStep = vi.fn();
+    const setFormData = vi.fn();
     renderWrapped(
       <FormContext.Provider
         value={{

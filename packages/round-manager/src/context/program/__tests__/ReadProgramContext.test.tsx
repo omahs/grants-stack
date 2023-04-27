@@ -17,18 +17,18 @@ const mockWallet = {
   },
 };
 
-jest.mock("../../../features/api/program");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/program");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 describe("<ReadProgramProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("usePrograms()", () => {
@@ -37,7 +37,7 @@ describe("<ReadProgramProvider />", () => {
         /**/
       });
 
-      (listPrograms as jest.Mock).mockReturnValue(listProgramsPromise);
+      (listPrograms as Mock).mockReturnValue(listProgramsPromise);
 
       renderWithProvider(<TestingUseProgramsComponent />);
 
@@ -49,7 +49,7 @@ describe("<ReadProgramProvider />", () => {
     });
 
     it("sets programs when fetch succeeds", async () => {
-      (listPrograms as jest.Mock).mockResolvedValue([makeProgramData()]);
+      (listPrograms as Mock).mockResolvedValue([makeProgramData()]);
 
       renderWithProvider(<TestingUseProgramsComponent />);
 
@@ -63,7 +63,7 @@ describe("<ReadProgramProvider />", () => {
     });
 
     it("sets fetch program error state when fetch fails", async () => {
-      (listPrograms as jest.Mock).mockRejectedValue(Error("some error"));
+      (listPrograms as Mock).mockRejectedValue(Error("some error"));
 
       renderWithProvider(<TestingUseProgramsComponent />);
 
@@ -77,7 +77,7 @@ describe("<ReadProgramProvider />", () => {
     });
 
     it("propagates error state when failing to list programs", async () => {
-      (listPrograms as jest.Mock).mockRejectedValue(
+      (listPrograms as Mock).mockRejectedValue(
         Error("some error message text")
       );
 
@@ -91,7 +91,7 @@ describe("<ReadProgramProvider />", () => {
     it("provides programs based on given program id", async () => {
       const expectedProgram = makeProgramData();
       const expectedProgramId = expectedProgram.id;
-      (getProgramById as jest.Mock).mockResolvedValue(expectedProgram);
+      (getProgramById as Mock).mockResolvedValue(expectedProgram);
 
       renderWithProvider(
         <TestingUseProgramByIdComponent expectedProgramId={expectedProgramId} />
@@ -103,7 +103,7 @@ describe("<ReadProgramProvider />", () => {
     it("sets program status to in progress when fetch is in progress", async () => {
       const expectedProgram = makeProgramData();
       const expectedProgramId = expectedProgram.id;
-      (getProgramById as jest.Mock).mockReturnValue(
+      (getProgramById as Mock).mockReturnValue(
         new Promise<Program>(() => {
           /* do nothing.*/
         })
@@ -123,7 +123,7 @@ describe("<ReadProgramProvider />", () => {
     it("sets programs when fetch succeeds", async () => {
       const expectedProgram = makeProgramData();
       const expectedProgramId = expectedProgram.id;
-      (getProgramById as jest.Mock).mockResolvedValue(expectedProgram);
+      (getProgramById as Mock).mockResolvedValue(expectedProgram);
 
       renderWithProvider(
         <TestingUseProgramByIdComponent expectedProgramId={expectedProgramId} />
@@ -141,7 +141,7 @@ describe("<ReadProgramProvider />", () => {
     it("sets fetch program error state when fetch fails", async () => {
       const expectedProgram = makeProgramData();
       const expectedProgramId = expectedProgram.id;
-      (getProgramById as jest.Mock).mockRejectedValue(new Error(":("));
+      (getProgramById as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(
         <TestingUseProgramByIdComponent expectedProgramId={expectedProgramId} />

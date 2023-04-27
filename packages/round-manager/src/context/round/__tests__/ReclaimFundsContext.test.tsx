@@ -7,15 +7,15 @@ import {
   useReclaimFunds,
 } from "../ReclaimFundsContext";
 
-jest.mock("wagmi");
-jest.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
+vi.mock("wagmi");
+vi.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
 
 const mockSigner = {
   getChainId: () => {
     /* do nothing.*/
   },
 };
-jest.mock("wagmi", () => ({
+vi.mock("wagmi", () => ({
   useSigner: () => ({ data: mockSigner }),
 }));
 
@@ -26,9 +26,9 @@ const testParams: ReclaimFundsParams = {
 
 describe("<ReclaimFundsProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
-    (reclaimFundsFromContract as jest.Mock).mockReturnValue(
+    (reclaimFundsFromContract as Mock).mockReturnValue(
       new Promise(() => {
         /* do nothing.*/
       })
@@ -54,10 +54,10 @@ describe("<ReclaimFundsProvider />", () => {
 });
 
 describe("useReclaimFunds Errors", () => {
-  let consoleErrorSpy: jest.SpyInstance;
+  let consoleErrorSpy: SpyInstance;
 
   beforeEach(() => {
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
       /* do nothing.*/
     });
   });
@@ -67,7 +67,7 @@ describe("useReclaimFunds Errors", () => {
   });
 
   it("sets reclaim status to error when invoking fund fails", async () => {
-    (reclaimFundsFromContract as jest.Mock).mockRejectedValue(new Error(":("));
+    (reclaimFundsFromContract as Mock).mockRejectedValue(new Error(":("));
 
     renderWithProvider(<TestUseReclaimFundsComponent {...testParams} />);
 
@@ -79,7 +79,7 @@ describe("useReclaimFunds Errors", () => {
   });
 
   it("if reclaim fails, resets reclaim status when reclaim contract is retried", async () => {
-    (reclaimFundsFromContract as jest.Mock)
+    (reclaimFundsFromContract as Mock)
       .mockRejectedValueOnce(new Error(":("))
       .mockReturnValue(
         new Promise(() => {

@@ -1,6 +1,6 @@
-jest.mock("../../../features/api/application");
-jest.mock("../../../features/api/subgraph");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/application");
+vi.mock("../../../features/api/subgraph");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
 const mockWallet = {
@@ -16,17 +16,17 @@ const mockWallet = {
 describe("<BulkUpdateGrantApplicationProvider />", () => {
   it("placeholder", () => {
     expect(true).toBe(true);
-  })
+  });
 });
 
 // describe("<BulkUpdateGrantApplicationProvider />", () => {
 // beforeEach(() => {
-//   jest.resetAllMocks();
+//   vi.resetAllMocks();
 // });
 
 // describe("useBulkUpdateGrantApplication", () => {
 //   it("sets contract update status to in progress when contract is being updated", async () => {
-//     (updateApplicationStatuses as jest.Mock).mockReturnValue(
+//     (updateApplicationStatuses as Mock).mockReturnValue(
 //       new Promise(() => {
 //         /* do nothing.*/
 //       })
@@ -44,7 +44,7 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 //   });
 
 //   it("sets update status to complete when updating contract succeeds", async () => {
-//     (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+//     (updateApplicationStatuses as Mock).mockResolvedValue({
 //       transactionBlockNumber: 100,
 //     });
 //     renderWithProvider(<TestUseBulkUpdateGrantApplicationComponent />);
@@ -60,10 +60,10 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 
 //   it("sets indexing status to in progress when waiting for subgraph to index", async () => {
 //     const transactionBlockNumber = 10;
-//     (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+//     (updateApplicationStatuses as Mock).mockResolvedValue({
 //       transactionBlockNumber,
 //     });
-//     (waitForSubgraphSyncTo as jest.Mock).mockReturnValue(
+//     (waitForSubgraphSyncTo as Mock).mockReturnValue(
 //       new Promise(() => {
 //         /* do nothing.*/
 //       })
@@ -83,10 +83,10 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 
 //   it("sets indexing status to completed when subgraph is finished indexing", async () => {
 //     const transactionBlockNumber = faker.datatype.number();
-//     (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+//     (updateApplicationStatuses as Mock).mockResolvedValue({
 //       transactionBlockNumber,
 //     });
-//     (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue({});
+//     (waitForSubgraphSyncTo as Mock).mockResolvedValue({});
 
 //     renderWithProvider(<TestUseBulkUpdateGrantApplicationComponent />);
 
@@ -101,7 +101,7 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 //   });
 
 //   describe("useBulkUpdateGrantApplication Errors", () => {
-//     let consoleErrorSpy: jest.SpyInstance;
+//     let consoleErrorSpy: SpyInstance
 
 //     beforeEach(() => {
 //       consoleErrorSpy = jest
@@ -116,10 +116,10 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 //     });
 
 //     it("sets indexing status to error when waiting for subgraph to sync fails", async () => {
-//       (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+//       (updateApplicationStatuses as Mock).mockResolvedValue({
 //         transactionBlockNumber: 100,
 //       });
-//       (waitForSubgraphSyncTo as jest.Mock).mockRejectedValue(new Error(":("));
+//       (waitForSubgraphSyncTo as Mock).mockRejectedValue(new Error(":("));
 
 //       renderWithProvider(<TestUseBulkUpdateGrantApplicationComponent />);
 //       fireEvent.click(screen.getByTestId("update-grant-application"));
@@ -132,7 +132,7 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 //     });
 
 //     it("if contract update fails, resets contract updating status when bulk update is retried", async () => {
-//       (updateApplicationStatuses as jest.Mock)
+//       (updateApplicationStatuses as Mock)
 //         .mockRejectedValueOnce(new Error(":("))
 //         .mockReturnValue(
 //           new Promise(() => {
@@ -157,10 +157,10 @@ describe("<BulkUpdateGrantApplicationProvider />", () => {
 //     });
 
 //     it("if indexing fails, resets indexing status when bulk update is retried", async () => {
-//       (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+//       (updateApplicationStatuses as Mock).mockResolvedValue({
 //         transactionBlockNumber: 100,
 //       });
-//       (waitForSubgraphSyncTo as jest.Mock)
+//       (waitForSubgraphSyncTo as Mock)
 //         .mockRejectedValueOnce(new Error(":("))
 //         .mockReturnValue(
 //           new Promise(() => {

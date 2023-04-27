@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { faker } from "@faker-js/faker";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { useParams } from "react-router-dom";
 import { useDisconnect, useSwitchNetwork } from "wagmi";
 import {
@@ -25,36 +20,36 @@ import { ProgressStatus, Round } from "../../api/types";
 import ViewRoundPage from "../ViewRoundPage";
 import { useRoundMatchingFunds } from "../../../hooks";
 
-jest.mock("../../common/Auth");
-jest.mock("../../api/round");
-jest.mock("wagmi");
+vi.mock("../../common/Auth");
+vi.mock("../../api/round");
+vi.mock("wagmi");
 
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 let mockRoundData: Round = makeRoundData();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useParams: vi.fn(),
 }));
 
-jest.mock("../../../hooks", () => ({
-  ...jest.requireActual("../../../hooks"),
-  useRoundMatchingFunds: jest.fn(),
+vi.mock("../../../hooks", () => ({
+  ...vi.importActual("../../../hooks"),
+  useRoundMatchingFunds: vi.fn(),
 }));
 
-jest.mock("../../api/payoutStrategy/merklePayoutStrategy", () => ({
-  ...jest.requireActual("../../api/payoutStrategy/merklePayoutStrategy"),
-  useFetchMatchingDistributionFromContract: jest.fn(),
+vi.mock("../../api/payoutStrategy/merklePayoutStrategy", () => ({
+  ...vi.importActual("../../api/payoutStrategy/merklePayoutStrategy"),
+  useFetchMatchingDistributionFromContract: vi.fn(),
 }));
 
-jest.mock("../../../context/round/FinalizeRoundContext", () => ({
-  ...jest.requireActual("../../../context/round/FinalizeRoundContext"),
+vi.mock("../../../context/round/FinalizeRoundContext", () => ({
+  ...vi.importActual("../../../context/round/FinalizeRoundContext"),
 }));
 
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {
       name: "Ethereum",
@@ -69,39 +64,39 @@ jest.mock("../../common/Auth", () => ({
   }),
 }));
 
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
 describe("View Round Results before distribution data is finalized to contract", () => {
   beforeEach(() => {
-    (useParams as jest.Mock).mockImplementation(() => {
+    (useParams as Mock).mockImplementation(() => {
       return {
         id: mockRoundData.id,
       };
     });
 
-    (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-    (useDisconnect as jest.Mock).mockReturnValue({});
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
   });
 
   describe("display round results tab", () => {
     it("displays matching stats table from api after round end date", async () => {
-      (useRoundMatchingFunds as jest.Mock).mockImplementation(() => ({
+      (useRoundMatchingFunds as Mock).mockImplementation(() => ({
         data: [makeQFDistribution(), makeQFDistribution()],
         error: null,
         loading: false,
       }));
 
-      (
-        useFetchMatchingDistributionFromContract as jest.Mock
-      ).mockImplementation(() => ({
-        distributionMetaPtr: "",
-        matchingDistribution: [],
-        isLoading: false,
-        isError: null,
-      }));
+      (useFetchMatchingDistributionFromContract as Mock).mockImplementation(
+        () => ({
+          distributionMetaPtr: "",
+          matchingDistribution: [],
+          isLoading: false,
+          isError: null,
+        })
+      );
 
       const roundEndTime = faker.date.recent();
       const roundStartTime = faker.date.past(1, roundEndTime);
@@ -143,20 +138,20 @@ describe("View Round Results before distribution data is finalized to contract",
 
   describe("finalize state to contract", () => {
     beforeEach(() => {
-      (useRoundMatchingFunds as jest.Mock).mockImplementation(() => ({
+      (useRoundMatchingFunds as Mock).mockImplementation(() => ({
         data: [makeQFDistribution(), makeQFDistribution()],
         error: null,
         loading: false,
       }));
 
-      (
-        useFetchMatchingDistributionFromContract as jest.Mock
-      ).mockImplementation(() => ({
-        distributionMetaPtr: "",
-        matchingDistribution: [],
-        isLoading: false,
-        isError: null,
-      }));
+      (useFetchMatchingDistributionFromContract as Mock).mockImplementation(
+        () => ({
+          distributionMetaPtr: "",
+          matchingDistribution: [],
+          isLoading: false,
+          isError: null,
+        })
+      );
 
       const roundEndTime = faker.date.past();
       mockRoundData = makeRoundData({ roundEndTime });
@@ -194,24 +189,24 @@ describe("View Round Results before distribution data is finalized to contract",
 
 describe("View Round Results after distribution data is finalized to contract", () => {
   beforeEach(() => {
-    (useParams as jest.Mock).mockImplementation(() => {
+    (useParams as Mock).mockImplementation(() => {
       return {
         id: mockRoundData.id,
       };
     });
 
-    (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-    (useDisconnect as jest.Mock).mockReturnValue({});
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
   });
 
   it("displays finalized matching data from contract", async () => {
-    (useRoundMatchingFunds as jest.Mock).mockImplementation(() => ({
+    (useRoundMatchingFunds as Mock).mockImplementation(() => ({
       data: [makeQFDistribution(), makeQFDistribution()],
       error: null,
       loading: false,
     }));
 
-    (useFetchMatchingDistributionFromContract as jest.Mock).mockImplementation(
+    (useFetchMatchingDistributionFromContract as Mock).mockImplementation(
       () => ({
         distributionMetaPtr: "abcd",
         matchingDistribution: [
@@ -260,4 +255,3 @@ describe("View Round Results after distribution data is finalized to contract", 
     expect(screen.getByTestId("match-stats-table")).toBeInTheDocument();
   });
 });
-

@@ -3,15 +3,14 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
-import { TextEncoder, TextDecoder } from "util";
+import { vi } from "vitest";
+import { TextEncoder, TextDecoder } from "web-encoding";
 
-global.TextEncoder = TextEncoder;
-// @ts-expect-error I love jest
-global.TextDecoder = TextDecoder;
+Object.assign(global, { TextDecoder, TextEncoder });
 
 beforeEach(() => {
   // @headlessui/react needs IntersectionObserver but isn't available in test environment
-  const mockIntersectionObserver = jest.fn();
+  const mockIntersectionObserver = vi.fn();
   mockIntersectionObserver.mockReturnValue({
     observe: () => null,
     unobserve: () => null,

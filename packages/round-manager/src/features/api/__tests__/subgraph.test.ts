@@ -4,20 +4,20 @@ import {
   waitForSubgraphSyncTo,
 } from "../subgraph";
 
-jest.mock("common", () => ({
-  ...jest.requireActual("common"),
-  graphql_fetch: jest.fn(),
+vi.mock("common", () => ({
+  ...vi.importActual("common"),
+  graphql_fetch: vi.fn(),
 }));
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("getCurrentSubgraphBlockNumber", () => {
   it("retrieves the current block number of the subgraph index", async () => {
     const chainId = 123;
     const expectedCurrentBlockNumber = 999;
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         _meta: {
           block: {
@@ -42,7 +42,7 @@ describe("Wait for subgraph to sync", () => {
 
   it("resolves when the current block number is greater than to the desired block number", async () => {
     const desiredBlockNumber = 5000;
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         _meta: {
           block: {
@@ -60,7 +60,7 @@ describe("Wait for subgraph to sync", () => {
 
   it("keeps polling until the current block number is greater than or equal to the desired block number", async () => {
     const desiredBlockNumber = 5000;
-    (graphql_fetch as jest.Mock)
+    (graphql_fetch as Mock)
       .mockResolvedValueOnce({
         data: {
           _meta: {

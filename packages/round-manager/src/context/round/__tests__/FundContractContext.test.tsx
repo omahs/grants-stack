@@ -11,18 +11,20 @@ import {
   FundContractProvider,
   useFundContract,
 } from "../FundContractContext";
+import { vi, Mock, SpyInstance } from "vitest";
 
-jest.mock("wagmi");
-jest.mock("../../../features/api/subgraph");
-jest.mock("../../../features/api/application");
+vi.mock("wagmi");
+vi.mock("../../../features/api/subgraph");
+vi.mock("../../../features/api/application");
 
 const mockSigner = {
   getChainId: () => {
     /* do nothing.*/
   },
 };
-jest.mock("wagmi", () => ({
+vi.mock("wagmi", () => ({
   useSigner: () => ({ data: mockSigner }),
+  ...vi.importActual("wagmi"),
 }));
 
 const testParams: FundContractParams = {
@@ -38,9 +40,9 @@ const testParams: FundContractParams = {
 
 describe("<FundContractProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
-    (fundRoundContract as jest.Mock).mockReturnValue(
+    (fundRoundContract as Mock).mockReturnValue(
       new Promise(() => {
         /* do nothing.*/
       })
@@ -74,10 +76,10 @@ describe("<FundContractProvider />", () => {
 });
 
 describe("useFundContract Errors", () => {
-  let consoleErrorSpy: jest.SpyInstance;
+  let consoleErrorSpy: SpyInstance;
 
   beforeEach(() => {
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
       /* do nothing.*/
     });
   });
@@ -87,7 +89,7 @@ describe("useFundContract Errors", () => {
   });
 
   it("sets fund status to error when invoking fund fails", async () => {
-    (fundRoundContract as jest.Mock).mockRejectedValue(new Error(":("));
+    (fundRoundContract as Mock).mockRejectedValue(new Error(":("));
 
     renderWithProvider(<TestUseFundContractComponent {...testParams} />);
 
@@ -99,13 +101,13 @@ describe("useFundContract Errors", () => {
   });
 
   it("sets indexing status to error when indexing fails", async () => {
-    (approveTokenOnContract as jest.Mock).mockResolvedValue({
+    (approveTokenOnContract as Mock).mockResolvedValue({
       transactionBlockNumber: faker.random.numeric(),
     });
-    (fundRoundContract as jest.Mock).mockResolvedValue({
+    (fundRoundContract as Mock).mockResolvedValue({
       transactionBlockNumber: faker.random.numeric(),
     });
-    (waitForSubgraphSyncTo as jest.Mock).mockRejectedValue(new Error(":("));
+    (waitForSubgraphSyncTo as Mock).mockRejectedValue(new Error(":("));
 
     renderWithProvider(<TestUseFundContractComponent {...testParams} />);
 
@@ -117,10 +119,10 @@ describe("useFundContract Errors", () => {
   });
 
   it("if fund fails, resets fund status when fund contract is retried", async () => {
-    (approveTokenOnContract as jest.Mock).mockResolvedValue({
+    (approveTokenOnContract as Mock).mockResolvedValue({
       transactionBlockNumber: faker.random.numeric(),
     });
-    (fundRoundContract as jest.Mock)
+    (fundRoundContract as Mock)
       .mockRejectedValueOnce(new Error(":("))
       .mockReturnValue(
         new Promise(() => {
@@ -141,13 +143,13 @@ describe("useFundContract Errors", () => {
   });
 
   it("if indexing fails, resets indexing status when fund contract is retried", async () => {
-    (approveTokenOnContract as jest.Mock).mockResolvedValue({
+    (approveTokenOnContract as Mock).mockResolvedValue({
       transactionBlockNumber: faker.random.numeric(),
     });
-    (fundRoundContract as jest.Mock).mockResolvedValue({
+    (fundRoundContract as Mock).mockResolvedValue({
       transactionBlockNumber: faker.random.numeric(),
     });
-    (waitForSubgraphSyncTo as jest.Mock)
+    (waitForSubgraphSyncTo as Mock)
       .mockRejectedValueOnce(new Error(":("))
       .mockReturnValue(
         new Promise(() => {

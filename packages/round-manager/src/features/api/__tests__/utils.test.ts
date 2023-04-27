@@ -1,4 +1,10 @@
-import { enableFetchMocks, FetchMock } from "jest-fetch-mock";
+import createFetchMock, { FetchMock } from "vitest-fetch-mock";
+import { vi } from "vitest";
+
+const fetchMocker = createFetchMock(vi);
+
+// sets globalThis.fetch and globalThis.fetchMock to our mocked version
+fetchMocker.enableMocks();
 
 import {
   ChainId,
@@ -14,8 +20,6 @@ import {
 import { checkGrantApplicationStatus } from "../application";
 import { MetadataPointer } from "../types";
 import { graphql_fetch } from "common";
-
-enableFetchMocks();
 
 const fetchMock = fetch as FetchMock;
 

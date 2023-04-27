@@ -11,21 +11,21 @@ import {
   getApplicationById,
   getApplicationsByRoundId,
 } from "../../../features/api/application";
-
+import { vi } from "vitest";
 const mockWallet = { address: "0x0", provider: {} };
 
-jest.mock("../../../features/api/application");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/application");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 describe("<ApplicationProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("useApplicationById()", () => {

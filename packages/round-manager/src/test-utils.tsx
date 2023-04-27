@@ -297,7 +297,7 @@ export const renderWithProgramContext = (
   ui: JSX.Element,
   programStateOverrides: Partial<ReadProgramState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>
@@ -316,7 +316,7 @@ export const renderWithApplicationContext = (
   ui: JSX.Element,
   grantApplicationStateOverrides: Partial<ApplicationState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>
@@ -338,7 +338,7 @@ export const wrapWithApplicationContext = (
   ui: JSX.Element,
   grantApplicationStateOverrides: Partial<ApplicationState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) => (
   <ApplicationContext.Provider
     value={{
@@ -357,7 +357,7 @@ export const wrapWithFinalizeRoundContext = (
   ui: JSX.Element,
   finalizeRoundStateOverrides: Partial<FinalizeRoundState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) => {
   return (
     <FinalizeRoundContext.Provider
@@ -375,7 +375,7 @@ export const wrapWithReadProgramContext = (
   ui: JSX.Element,
   programStateOverrides: Partial<ReadProgramState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) => (
   <MemoryRouter>
     <ReadProgramContext.Provider
@@ -393,7 +393,7 @@ export const wrapWithRoundContext = (
   ui: JSX.Element,
   roundStateOverrides: Partial<RoundState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) => (
   <RoundContext.Provider
     value={{

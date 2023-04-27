@@ -4,7 +4,7 @@ import {
   render,
   screen,
   waitFor,
-  within
+  within,
 } from "@testing-library/react";
 import { randomInt } from "crypto";
 import { act } from "react-dom/test-utils";
@@ -12,7 +12,7 @@ import { MemoryRouter } from "react-router-dom";
 import {
   CreateRoundContext,
   CreateRoundState,
-  initialCreateRoundState
+  initialCreateRoundState,
 } from "../../../context/round/CreateRoundContext";
 import { saveToIPFS } from "../../api/ipfs";
 import { deployMerklePayoutStrategyContract } from "../../api/payoutStrategy/merklePayoutStrategy";
@@ -25,26 +25,26 @@ import { FormStepper } from "../../common/FormStepper";
 import { FormContext } from "../../common/FormWizard";
 import {
   initialQuestions,
-  RoundApplicationForm
+  RoundApplicationForm,
 } from "../RoundApplicationForm";
 
-jest.mock("../../api/ipfs");
-jest.mock("../../api/round");
-jest.mock("../../api/subgraph");
-jest.mock("../../common/Auth");
-jest.mock("../../api/payoutStrategy/merklePayoutStrategy");
-jest.mock("../../api/votingStrategy/qfVotingStrategy");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../api/ipfs");
+vi.mock("../../api/round");
+vi.mock("../../api/subgraph");
+vi.mock("../../common/Auth");
+vi.mock("../../api/payoutStrategy/merklePayoutStrategy");
+vi.mock("../../api/votingStrategy/qfVotingStrategy");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 const randomMetadata = {
@@ -53,7 +53,7 @@ const randomMetadata = {
 
 describe("<RoundApplicationForm />", () => {
   beforeEach(() => {
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: { name: "my blockchain" },
       provider: {
         getNetwork: () => ({
@@ -65,17 +65,17 @@ describe("<RoundApplicationForm />", () => {
       },
       address: "0x0",
     });
-    (saveToIPFS as jest.Mock).mockResolvedValue("some ipfs hash");
-    (deployQFVotingContract as jest.Mock).mockResolvedValue({
+    (saveToIPFS as Mock).mockResolvedValue("some ipfs hash");
+    (deployQFVotingContract as Mock).mockResolvedValue({
       votingContractAddress: "0xVotingContract",
     });
-    (deployMerklePayoutStrategyContract as jest.Mock).mockResolvedValue({
+    (deployMerklePayoutStrategyContract as Mock).mockResolvedValue({
       contractAddress: "0xPayoutContract",
     });
-    (deployRoundContract as jest.Mock).mockResolvedValue({
+    (deployRoundContract as Mock).mockResolvedValue({
       transactionBlockNumber: 0,
     });
-    (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue(0);
+    (waitForSubgraphSyncTo as Mock).mockResolvedValue(0);
   });
 
   describe("when submitting form", () => {
@@ -164,7 +164,7 @@ describe("<RoundApplicationForm />", () => {
       await startProgressModal();
 
       expect(await screen.findByTestId("error-modal")).toBeInTheDocument();
-      const saveToIpfsCalls = (saveToIPFS as jest.Mock).mock.calls.length;
+      const saveToIpfsCalls = (saveToIPFS as Mock).mock.calls.length;
       expect(saveToIpfsCalls).toEqual(2);
 
       const errorModalTryAgain = await screen.findByTestId("tryAgain");
@@ -172,7 +172,7 @@ describe("<RoundApplicationForm />", () => {
 
       expect(screen.queryByTestId("error-modal")).not.toBeInTheDocument();
       await waitFor(() => {
-        expect((saveToIPFS as jest.Mock).mock.calls.length).toEqual(
+        expect((saveToIPFS as Mock).mock.calls.length).toEqual(
           saveToIpfsCalls + 2
         );
       });
@@ -217,7 +217,7 @@ describe("<RoundApplicationForm />", () => {
 
 describe("Application Form Builder", () => {
   beforeEach(() => {
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: { name: "my blockchain" },
       provider: {
         getNetwork: () => ({
@@ -261,10 +261,10 @@ describe("Application Form Builder", () => {
         hidden: false,
       },
     ];
-    const setFormData = jest.fn();
+    const setFormData = vi.fn();
     const formContext = {
       currentStep: 2,
-      setCurrentStep: jest.fn(),
+      setCurrentStep: vi.fn(),
       stepsCount: 3,
       formData: {
         applicationMetadata: {
@@ -415,9 +415,7 @@ describe("Application Form Builder", () => {
         fireEvent.click(save);
       }
 
-      const encryptionToggleLabels = screen.getAllByText(
-        "Encrypted"
-      );
+      const encryptionToggleLabels = screen.getAllByText("Encrypted");
 
       expect(encryptionToggleLabels.length).toBe(1);
     });
@@ -493,9 +491,7 @@ describe("Application Form Builder", () => {
       // 8. Funding Source Optional
       // 9. Team Size Optional
 
-      const requiredToggleLabels = screen.getAllByText(
-        "*Required"
-      );
+      const requiredToggleLabels = screen.getAllByText("*Required");
 
       expect(requiredToggleLabels.length).toBe(4);
     });
@@ -604,7 +600,7 @@ describe("Application Form Builder", () => {
 
       selectList = screen.getByTestId("select-question");
 
-      const selectType = within(selectList).getAllByText("Paragraph")
+      const selectType = within(selectList).getAllByText("Paragraph");
       fireEvent.click(selectType[0]);
 
       const inputField = screen.getByTestId("question-title-input");
@@ -618,7 +614,7 @@ describe("Application Form Builder", () => {
   });
   describe("Project Socials", () => {
     beforeEach(() => {
-      (useWallet as jest.Mock).mockReturnValue({
+      (useWallet as Mock).mockReturnValue({
         chain: { name: "my blockchain" },
         provider: {
           getNetwork: () => ({

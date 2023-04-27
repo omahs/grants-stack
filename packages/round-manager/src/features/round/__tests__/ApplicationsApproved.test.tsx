@@ -26,16 +26,16 @@ import {
 } from "../../api/application";
 import { ProgressStatus } from "../../api/types";
 
-jest.mock("../../api/application");
-jest.mock("../../api/subgraph");
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("../../api/application");
+vi.mock("../../api/subgraph");
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useParams: () => ({
     id: "some-round-id",
   }),
 }));
 const roundIdOverride = "some-round-id";
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: "0x0",
@@ -47,8 +47,8 @@ jest.mock("../../common/Auth", () => ({
     provider: { getNetwork: () => ({ chainId: "0" }) },
   }),
 }));
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
@@ -75,10 +75,8 @@ const setupInBulkSelectionMode = () => {
 
 describe("<ApplicationsApproved />", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    (getApplicationsByRoundId as jest.Mock).mockResolvedValue(
-      grantApplications
-    );
+    vi.clearAllMocks();
+    (getApplicationsByRoundId as Mock).mockResolvedValue(grantApplications);
   });
 
   it("should display a loading spinner if approved applications are loading", () => {
@@ -256,7 +254,7 @@ describe("<ApplicationsApproved />", () => {
     });
 
     it("starts the bulk update process to persist rejected applications when confirm is selected", async () => {
-      (updateApplicationStatuses as jest.Mock).mockReturnValue(
+      (updateApplicationStatuses as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing */
         })
@@ -297,7 +295,7 @@ describe("<ApplicationsApproved />", () => {
 
       expect(updateApplicationStatuses).toBeCalled();
       const updateApplicationStatusesFirstCall = (
-        updateApplicationStatuses as jest.Mock
+        updateApplicationStatuses as Mock
       ).mock.calls[0];
       const actualRoundId = updateApplicationStatusesFirstCall[0];
       expect(actualRoundId).toEqual(roundIdOverride);
@@ -305,10 +303,10 @@ describe("<ApplicationsApproved />", () => {
 
     // TODO -- can't get this to pass -- expect(updateApplicationStatuses).toBeCalled() fails even though updateApplicationStatuses is called
     // it("update round contract", async () => {
-    //   (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+    //   (updateApplicationStatuses as Mock).mockResolvedValue({
     //     transactionBlockNumber: 99,
     //   });
-    //   (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue({});
+    //   (waitForSubgraphSyncTo as Mock).mockResolvedValue({});
     //
     //   renderWithContext(
     //     <ApplicationsApproved />,
@@ -339,7 +337,7 @@ describe("<ApplicationsApproved />", () => {
     //   await screen.findByTestId("Updating-complete-icon");
     //
     //   expect(updateApplicationStatuses).toBeCalled();
-    //   const updateApplicationStatusesFirstCall = (updateApplicationStatuses as jest.Mock)
+    //   const updateApplicationStatusesFirstCall = (updateApplicationStatuses as Mock)
     //     .mock.calls[0];
     //   const actualRoundId = updateApplicationStatusesFirstCall[0];
     //   expect(actualRoundId).toEqual(roundIdOverride);
@@ -370,7 +368,7 @@ describe("<ApplicationsApproved />", () => {
   describe("when processing bulk action fails", () => {
     beforeEach(() => {
       const transactionBlockNumber = 10;
-      (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+      (updateApplicationStatuses as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
 
@@ -439,7 +437,7 @@ export const renderWithContext = (
   grantApplicationStateOverrides: Partial<ApplicationState> = {},
   bulkUpdateApplicationStateOverrides: Partial<BulkUpdateGrantApplicationState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>

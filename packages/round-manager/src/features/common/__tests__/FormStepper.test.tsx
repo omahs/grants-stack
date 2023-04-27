@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 
 describe("<FormStepper />", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("when currentStep is past the first step", () => {
@@ -17,7 +17,7 @@ describe("<FormStepper />", () => {
         currentStep,
         stepsCount,
         disableNext: false,
-        prev: jest.fn(),
+        prev: vi.fn(),
       };
 
       renderWrapped(<FormStepper {...testFormStepperProps} />);
@@ -26,7 +26,7 @@ describe("<FormStepper />", () => {
     });
 
     it("should call prev fn when Previous button is clicked", () => {
-      const mockPrevFn = jest.fn();
+      const mockPrevFn = vi.fn();
       const testFormStepperProps: FormStepperProps = {
         currentStep,
         stepsCount,
@@ -49,7 +49,7 @@ describe("<FormStepper />", () => {
       currentStep,
       stepsCount,
       disableNext: false,
-      prev: jest.fn(),
+      prev: vi.fn(),
     };
 
     it("should display a Next button", () => {
@@ -78,7 +78,7 @@ describe("<FormStepper />", () => {
       currentStep,
       stepsCount,
       disableNext: false,
-      prev: jest.fn(),
+      prev: vi.fn(),
     };
 
     it("should display a Launch button instead of Next", () => {

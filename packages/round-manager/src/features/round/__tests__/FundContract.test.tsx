@@ -24,21 +24,23 @@ import { faker } from "@faker-js/faker";
 const { TextDecoder } = require("util");
 global.TextDecoder = TextDecoder;
 
-jest.mock("../../common/Auth");
-jest.mock("wagmi");
+import { vi, Mock } from "vitest";
 
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../common/Auth");
+vi.mock("wagmi");
+
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 let mockRoundData: Round = makeRoundData();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useParams: vi.fn(),
 }));
 
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: mockRoundData.operatorWallets![0],
@@ -46,43 +48,43 @@ jest.mock("../../common/Auth", () => ({
   }),
 }));
 
-jest.mock("../../api/utils", () => ({
-  ...jest.requireActual("../../api/utils"),
-  useTokenPrice: jest.fn(),
+vi.mock("../../api/utils", () => ({
+  ...vi.importActual("../../api/utils"),
+  useTokenPrice: vi.fn(),
 }));
 
 describe("fund contract tab", () => {
   beforeEach(() => {
-    (useParams as jest.Mock).mockImplementation(() => {
+    (useParams as Mock).mockImplementation(() => {
       return {
         id: mockRoundData.id,
       };
     });
 
-    (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-    (useDisconnect as jest.Mock).mockReturnValue({});
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
   });
 
   it("displays fund contract tab", async () => {
     mockRoundData = makeRoundData();
 
-    (useTokenPrice as jest.Mock).mockImplementation(() => ({
+    (useTokenPrice as Mock).mockImplementation(() => ({
       data: "100",
       error: null,
       loading: false,
     }));
 
-    (useBalance as jest.Mock).mockImplementation(() => ({
+    (useBalance as Mock).mockImplementation(() => ({
       data: { formatted: "0", value: "0" },
       error: null,
       loading: false,
     }));
 
-    (useAccount as jest.Mock).mockImplementation(() => ({
+    (useAccount as Mock).mockImplementation(() => ({
       address: faker.finance.ethereumAddress(),
     }));
 
-    (useSigner as jest.Mock).mockImplementation(() => ({
+    (useSigner as Mock).mockImplementation(() => ({
       signer: {
         getBalance: () => Promise.resolve("0"),
       },

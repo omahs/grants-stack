@@ -15,7 +15,7 @@ Object.assign(navigator, {
 
 describe("<CopyToClipboardButton />", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should display Copy to clipboard when not clicked ", () => {

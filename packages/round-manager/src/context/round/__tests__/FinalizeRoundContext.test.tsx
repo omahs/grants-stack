@@ -17,25 +17,25 @@ const mockWallet = {
     },
   },
 };
-jest.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
-jest.mock("../../../features/api/round");
-jest.mock("../../../features/api/ipfs");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
+vi.mock("../../../features/api/round");
+vi.mock("../../../features/api/ipfs");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 describe("<FinalizeRoundProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("useFinalizeRound()", () => {
     it("sets ipfs status to in progress when saving to ipfs", async () => {
-      (saveToIPFS as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -54,8 +54,8 @@ describe("<FinalizeRoundProvider />", () => {
     });
 
     it("sets ipfs status to complete when saving to ipfs succeeds", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("my ipfs doc :)))");
-      (updateDistributionToContract as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockResolvedValue("my ipfs doc :)))");
+      (updateDistributionToContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -74,8 +74,8 @@ describe("<FinalizeRoundProvider />", () => {
     });
 
     it("sets contract deployment status to success when contract has been deployed", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("bafabcdef");
-      (updateDistributionToContract as jest.Mock).mockResolvedValue({});
+      (saveToIPFS as Mock).mockResolvedValue("bafabcdef");
+      (updateDistributionToContract as Mock).mockResolvedValue({});
 
       renderWithProvider(<TestUseFinalizeRoundComponent />);
 
@@ -91,10 +91,10 @@ describe("<FinalizeRoundProvider />", () => {
   });
 
   describe("useFinalizeRound() Errors", () => {
-    let consoleErrorSpy: jest.SpyInstance;
+    let consoleErrorSpy: SpyInstance;
 
     beforeEach(() => {
-      consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+      consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
         /* do nothing.*/
       });
     });
@@ -104,7 +104,7 @@ describe("<FinalizeRoundProvider />", () => {
     });
 
     it("sets ipfs status to error when ipfs save fails", async () => {
-      (saveToIPFS as jest.Mock).mockRejectedValue(new Error(":("));
+      (saveToIPFS as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(<TestUseFinalizeRoundComponent />);
       const finalizeRound = screen.getByTestId("finalize-round");
@@ -118,8 +118,8 @@ describe("<FinalizeRoundProvider />", () => {
     });
 
     it("sets contract deployment status to error when deployment fails", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (updateDistributionToContract as jest.Mock).mockRejectedValue(
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (updateDistributionToContract as Mock).mockRejectedValue(
         new Error("Failed to deploy :(")
       );
 
@@ -135,7 +135,7 @@ describe("<FinalizeRoundProvider />", () => {
     });
 
     it("if ipfs save fails, resets ipfs status when create round is retried", async () => {
-      (saveToIPFS as jest.Mock)
+      (saveToIPFS as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {

@@ -34,11 +34,13 @@ import {
 } from "../../../context/application/BulkUpdateGrantApplicationContext";
 import { GrantApplication, ProgressStatus } from "../../api/types";
 
-jest.mock("../../api/application");
-jest.mock("../../common/Auth");
+import { Mock, vi } from "vitest";
 
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../api/application");
+vi.mock("../../common/Auth");
+
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
@@ -55,8 +57,8 @@ const mockWallet = {
   },
 };
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useParams: () => ({
     id: "some-application-id",
     roundId: "some-round-id",
@@ -66,28 +68,26 @@ jest.mock("react-router-dom", () => ({
 const applicationIdOverride = "some-application-id";
 const roundIdOverride = "some-round-id";
 
-jest.mock("@gitcoinco/passport-sdk-verifier");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("@gitcoinco/passport-sdk-verifier");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
-jest.mock("wagmi");
+vi.mock("wagmi");
 
-const verifyCredentialMock = jest.spyOn(
+const verifyCredentialMock = vi.spyOn(
   PassportVerifier.prototype,
   "verifyCredential"
 );
 
 describe("ViewApplicationPage", () => {
   beforeEach(() => {
-    (useWallet as jest.Mock).mockImplementation(() => mockWallet);
+    (useWallet as Mock).mockImplementation(() => mockWallet);
     (useSwitchNetwork as any).mockReturnValue({ chains: [] });
     (useDisconnect as any).mockReturnValue({});
   });
 
   it("should display 404 when there no application is found", () => {
-    (getApplicationsByRoundId as jest.Mock).mockRejectedValue(
-      "No application :("
-    );
+    (getApplicationsByRoundId as Mock).mockRejectedValue("No application :(");
 
     renderWithContext(<ViewApplicationPage />, {
       applications: [],
@@ -102,7 +102,7 @@ describe("ViewApplicationPage", () => {
     const application = makeGrantApplicationData({ applicationIdOverride });
     (getApplicationsByRoundId as any).mockResolvedValue(application);
     const wrongAddress = faker.finance.ethereumAddress();
-    (useWallet as jest.Mock).mockImplementation(() => ({
+    (useWallet as Mock).mockImplementation(() => ({
       ...mockWallet,
       address: wrongAddress,
     }));
@@ -153,7 +153,7 @@ describe("ViewApplicationPage", () => {
     let application: GrantApplication;
 
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
       application = makeGrantApplicationData({
         applicationIdOverride,
         roundIdOverride,
@@ -181,7 +181,7 @@ describe("ViewApplicationPage", () => {
 
     it("should start the bulk update process to persist approve decision when confirm is selected", async () => {
       const transactionBlockNumber = 10;
-      (updateApplicationStatuses as jest.Mock).mockResolvedValue(
+      (updateApplicationStatuses as Mock).mockResolvedValue(
         transactionBlockNumber
       );
 
@@ -209,7 +209,7 @@ describe("ViewApplicationPage", () => {
 
       expect(updateApplicationStatuses).toBeCalled();
       const updateApplicationStatusesFirstCall = (
-        updateApplicationStatuses as jest.Mock
+        updateApplicationStatuses as Mock
       ).mock.calls[0];
       const actualRoundId = updateApplicationStatusesFirstCall[0];
       expect(actualRoundId).toEqual(roundIdOverride);
@@ -230,7 +230,7 @@ describe("ViewApplicationPage", () => {
 
     it("shows error modal when reviewing application fails", async () => {
       const transactionBlockNumber = 10;
-      (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+      (updateApplicationStatuses as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
 
@@ -254,7 +254,7 @@ describe("ViewApplicationPage", () => {
 
     it("choosing done closes the error modal", async () => {
       const transactionBlockNumber = 10;
-      (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+      (updateApplicationStatuses as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
 
@@ -287,9 +287,9 @@ describe("ViewApplicationPage", () => {
 
 describe("ViewApplicationPage verification badges", () => {
   beforeEach(() => {
-    (useWallet as jest.Mock).mockImplementation(() => mockWallet);
-    (useSwitchNetwork as any).mockReturnValue({ chains: [] });
-    (useDisconnect as any).mockReturnValue({});
+    (useWallet as Mock).mockImplementation(() => mockWallet);
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
   });
 
   it("shows project twitter with no badge when there is no credential", async () => {
@@ -579,7 +579,7 @@ export const renderWithContext = (
   ui: JSX.Element,
   applicationStateOverrides: Partial<ApplicationState> = {},
   bulkUpdateGrantApplicationStateOverrides: Partial<BulkUpdateGrantApplicationState> = {},
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>

@@ -13,19 +13,19 @@ import { useBalance, useDisconnect, useSigner, useSwitchNetwork } from "wagmi";
 import ViewRoundPage from "../ViewRoundPage";
 import { useParams } from "react-router-dom";
 
-jest.mock("wagmi");
-jest.mock("../../common/Auth");
+vi.mock("wagmi");
+vi.mock("../../common/Auth");
 
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useParams: vi.fn(),
 }));
 
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: mockRoundData.operatorWallets![0],
@@ -33,9 +33,9 @@ jest.mock("../../common/Auth", () => ({
   }),
 }));
 
-jest.mock("../../api/utils", () => ({
-  ...jest.requireActual("../../api/utils"),
-  useTokenPrice: jest.fn(),
+vi.mock("../../api/utils", () => ({
+  ...vi.importActual("../../api/utils"),
+  useTokenPrice: vi.fn(),
 }));
 
 const chainId = "0";
@@ -68,14 +68,14 @@ describe("ReclaimFunds", () => {
 
   describe("when round is over", () => {
     beforeEach(() => {
-      (useParams as jest.Mock).mockImplementation(() => {
+      (useParams as Mock).mockImplementation(() => {
         return {
           id: mockRoundData.id,
         };
       });
 
-      (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-      (useDisconnect as jest.Mock).mockReturnValue({});
+      (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+      (useDisconnect as Mock).mockReturnValue({});
 
       const currentTime = new Date();
       const roundEndTime = new Date(
@@ -85,19 +85,19 @@ describe("ReclaimFunds", () => {
     });
 
     it("displays ReclaimFundsContent when round is over", () => {
-      (useTokenPrice as jest.Mock).mockImplementation(() => ({
+      (useTokenPrice as Mock).mockImplementation(() => ({
         data: "100",
         error: null,
         loading: false,
       }));
 
-      (useBalance as jest.Mock).mockImplementation(() => ({
+      (useBalance as Mock).mockImplementation(() => ({
         data: { formatted: "0", value: "0" },
         error: null,
         loading: false,
       }));
 
-      (useSigner as jest.Mock).mockImplementation(() => ({
+      (useSigner as Mock).mockImplementation(() => ({
         signer: {
           getBalance: () => Promise.resolve("0"),
         },

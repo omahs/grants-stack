@@ -5,12 +5,12 @@ import { makeRoundData } from "../../../test-utils";
 import { getRoundById, listRounds } from "../../../features/api/round";
 import { ProgressStatus, Round } from "../../../features/api/types";
 
-jest.mock("../../../features/api/round");
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../../features/api/round");
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
 const mockWallet = {
@@ -24,7 +24,7 @@ const mockWallet = {
 
 describe("<RoundProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("useRounds()", () => {
@@ -54,7 +54,7 @@ describe("<RoundProvider />", () => {
     it("sets fetch round status to in progress when fetch is in progress", async () => {
       const expectedRound = makeRoundData();
       const expectedProgramId = expectedRound.id;
-      (listRounds as jest.Mock).mockReturnValue(
+      (listRounds as Mock).mockReturnValue(
         new Promise<Round>(() => {
           /* do nothing.*/
         })
@@ -81,7 +81,7 @@ describe("<RoundProvider />", () => {
         makeRoundData(),
       ];
       const expectedProgramId = expectedRoundList[0].ownedBy;
-      (listRounds as jest.Mock).mockResolvedValue({
+      (listRounds as Mock).mockResolvedValue({
         rounds: expectedRoundList,
       });
 
@@ -108,7 +108,7 @@ describe("<RoundProvider />", () => {
     it("sets fetch round status to error when fetch fails", async () => {
       const expectedRound = makeRoundData();
       const expectedProgramId = expectedRound.ownedBy;
-      (listRounds as jest.Mock).mockRejectedValue(new Error(":("));
+      (listRounds as Mock).mockRejectedValue(new Error(":("));
 
       render(
         <RoundProvider>

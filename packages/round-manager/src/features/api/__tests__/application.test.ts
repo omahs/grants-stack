@@ -5,17 +5,18 @@ import { GrantApplication } from "../types";
 import { Contract } from "ethers";
 import { Web3Provider } from "@ethersproject/providers";
 import { graphql_fetch } from "common";
+import { vi, Mock } from "vitest";
 
-jest.mock("../utils", () => ({
-  ...jest.requireActual("../utils"),
-  fetchFromIPFS: jest.fn(),
+vi.mock("../utils", () => ({
+  ...vi.importActual("../utils"),
+  fetchFromIPFS: vi.fn(),
 }));
-jest.mock("common", () => ({
-  ...jest.requireActual("common"),
-  graphql_fetch: jest.fn(),
+vi.mock("common", () => ({
+  ...vi.importActual("common"),
+  graphql_fetch: vi.fn(),
 }));
 
-jest.mock("ethers");
+vi.mock("ethers");
 
 const signerOrProviderStub = {
   getNetwork: async () => Promise.resolve({ chainId: "chain" }),
@@ -46,7 +47,7 @@ describe("getApplicationById", () => {
       protocol: 1,
       pointer: "bafkreigfajf5ud3js6bmh3lwg5sp7cqyrqoy7e65y25myyqjywllxvcw2u",
     };
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         roundApplications: [
           {
@@ -62,7 +63,7 @@ describe("getApplicationById", () => {
       },
     });
 
-    (fetchFromIPFS as jest.Mock).mockImplementation((metaptr: string) => {
+    (fetchFromIPFS as Mock).mockImplementation((metaptr: string) => {
       if (metaptr === expectedApplicationMetaPtr.pointer) {
         return {
           round: expectedApplication.round,
@@ -97,7 +98,7 @@ describe("getApplicationById", () => {
       .mockImplementation(() => {
         /* do nothing */
       });
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         roundApplications: [],
       },
@@ -122,7 +123,7 @@ describe("getApplicationById", () => {
       protocol: 1,
       pointer: "bafkreigfajf5ud3js6bmh3lwg5sp7cqyrqoy7e65y25myyqjywllxvcw2u",
     };
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         roundApplications: [
           {
@@ -138,7 +139,7 @@ describe("getApplicationById", () => {
       },
     });
 
-    (fetchFromIPFS as jest.Mock).mockImplementation((metaptr: string) => {
+    (fetchFromIPFS as Mock).mockImplementation((metaptr: string) => {
       if (metaptr === expectedApplicationMetaPtr.pointer) {
         return {
           signature: "someSignature",
@@ -185,7 +186,7 @@ describe("getApplicationsByRoundId", () => {
       protocol: 1,
       pointer: "bafkreigfajf5ud3js6bmh3lwg5sp7cqyrqoy7e65y25myyqjywllxvcw2u",
     };
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         roundApplications: [
           {
@@ -201,7 +202,7 @@ describe("getApplicationsByRoundId", () => {
       },
     });
 
-    (fetchFromIPFS as jest.Mock).mockImplementation((metaptr: string) => {
+    (fetchFromIPFS as Mock).mockImplementation((metaptr: string) => {
       if (metaptr === expectedApplicationMetaPtr.pointer) {
         return {
           round: expectedApplication.round,
@@ -237,7 +238,7 @@ describe("getApplicationsByRoundId", () => {
       protocol: 1,
       pointer: "bafkreigfajf5ud3js6bmh3lwg5sp7cqyrqoy7e65y25myyqjywllxvcw2u",
     };
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         roundApplications: [
           {
@@ -253,7 +254,7 @@ describe("getApplicationsByRoundId", () => {
       },
     });
 
-    (fetchFromIPFS as jest.Mock).mockImplementation((metaptr: string) => {
+    (fetchFromIPFS as Mock).mockImplementation((metaptr: string) => {
       if (metaptr === expectedApplicationMetaPtr.pointer) {
         return {
           signature: "some-signature",

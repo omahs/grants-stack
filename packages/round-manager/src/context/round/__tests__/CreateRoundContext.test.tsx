@@ -10,7 +10,7 @@ import { deployRoundContract } from "../../../features/api/round";
 import { waitForSubgraphSyncTo } from "../../../features/api/subgraph";
 import { deployMerklePayoutStrategyContract } from "../../../features/api/payoutStrategy/merklePayoutStrategy";
 import { deployQFVotingContract } from "../../../features/api/votingStrategy/qfVotingStrategy";
-
+import { vi, Mock, SpyInstance } from "vitest";
 const mockWallet = {
   address: "0x0",
   signer: {
@@ -20,17 +20,17 @@ const mockWallet = {
   },
 };
 
-jest.mock("../../../features/api/votingStrategy/qfVotingStrategy");
-jest.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
-jest.mock("../../../features/api/round");
-jest.mock("../../../features/api/ipfs");
-jest.mock("../../../features/api/subgraph");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/votingStrategy/qfVotingStrategy");
+vi.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
+vi.mock("../../../features/api/round");
+vi.mock("../../../features/api/ipfs");
+vi.mock("../../../features/api/subgraph");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 describe("<CreateRoundProvider />", () => {
@@ -41,12 +41,12 @@ describe("<CreateRoundProvider />", () => {
 
   describe("Set IPFS Status", () => {
     beforeEach(() => {
-      (deployQFVotingContract as jest.Mock).mockReturnValue(
+      (deployQFVotingContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
       );
-      (deployMerklePayoutStrategyContract as jest.Mock).mockReturnValue(
+      (deployMerklePayoutStrategyContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -54,7 +54,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets ipfs status to in progress when saving to ipfs", async () => {
-      (saveToIPFS as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -71,7 +71,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets ipfs status to complete when saving to ipfs succeeds", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("my ipfs doc :)))");
+      (saveToIPFS as Mock).mockResolvedValue("my ipfs doc :)))");
 
       renderWithProvider(<TestUseCreateRoundComponent />);
       invokeCreateRound();
@@ -87,8 +87,8 @@ describe("<CreateRoundProvider />", () => {
   describe("Set Voting Contract Deployment Status", () => {
     beforeEach(() => {
       const ipfsHash = "bafabcdef";
-      (saveToIPFS as jest.Mock).mockResolvedValue(ipfsHash);
-      (deployRoundContract as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockResolvedValue(ipfsHash);
+      (deployRoundContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -96,7 +96,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets voting contract deployment status to in progress when voting contract is being deployed", async () => {
-      (deployQFVotingContract as jest.Mock).mockReturnValue(
+      (deployQFVotingContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -113,10 +113,10 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets voting contract deployment status to success when voting contract has been deployed", async () => {
-      (deployQFVotingContract as jest.Mock).mockResolvedValue({
+      (deployQFVotingContract as Mock).mockResolvedValue({
         votingContractAddress: "0xVotingContract",
       });
-      (deployMerklePayoutStrategyContract as jest.Mock).mockReturnValue(
+      (deployMerklePayoutStrategyContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -136,11 +136,11 @@ describe("<CreateRoundProvider />", () => {
   describe("Set Payout Contract Deployment Status", () => {
     beforeEach(() => {
       const ipfsHash = "bafabcdef";
-      (saveToIPFS as jest.Mock).mockResolvedValue(ipfsHash);
-      (deployQFVotingContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue(ipfsHash);
+      (deployQFVotingContract as Mock).mockResolvedValue({
         votingContractAddress: "0xVotingContract",
       });
-      (deployRoundContract as jest.Mock).mockReturnValue(
+      (deployRoundContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -148,7 +148,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets payout contract deployment status to in progress when payout contract is being deployed", async () => {
-      (deployMerklePayoutStrategyContract as jest.Mock).mockReturnValue(
+      (deployMerklePayoutStrategyContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -165,7 +165,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets payout contract deployment status to success when payout contract has been deployed", async () => {
-      (deployMerklePayoutStrategyContract as jest.Mock).mockResolvedValue({
+      (deployMerklePayoutStrategyContract as Mock).mockResolvedValue({
         payoutContractAddress: "0xPayoutContract",
       });
 
@@ -183,17 +183,17 @@ describe("<CreateRoundProvider />", () => {
   describe("Set Round Contract Deployment Status", () => {
     const ipfsHash = "bafabcdef";
     beforeEach(() => {
-      (saveToIPFS as jest.Mock).mockResolvedValue(ipfsHash);
-      (deployQFVotingContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue(ipfsHash);
+      (deployQFVotingContract as Mock).mockResolvedValue({
         votingContractAddress: "0xVotingContract",
       });
-      (deployMerklePayoutStrategyContract as jest.Mock).mockResolvedValue({
+      (deployMerklePayoutStrategyContract as Mock).mockResolvedValue({
         payoutContractAddress: "0xPayoutContract",
       });
     });
 
     it("sets round contract deployment status to in progress when round contract is being deployed", async () => {
-      (deployRoundContract as jest.Mock).mockReturnValue(
+      (deployRoundContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -207,7 +207,7 @@ describe("<CreateRoundProvider />", () => {
           `round-deploying-status-is-${ProgressStatus.IN_PROGRESS}`
         )
       );
-      const firstCall = (deployRoundContract as jest.Mock).mock.calls[0];
+      const firstCall = (deployRoundContract as Mock).mock.calls[0];
       const roundParameter = firstCall[0];
       const actualRoundMetadataPointer = roundParameter.store;
       expect(actualRoundMetadataPointer).toEqual({
@@ -222,7 +222,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets round contract deployment status to success when round contract has been deployed", async () => {
-      (deployRoundContract as jest.Mock).mockResolvedValue({});
+      (deployRoundContract as Mock).mockResolvedValue({});
 
       renderWithProvider(<TestUseCreateRoundComponent />);
       invokeCreateRound();
@@ -238,20 +238,20 @@ describe("<CreateRoundProvider />", () => {
   describe("Set Indexing Status", () => {
     const transactionBlockNumber = 10;
     beforeEach(() => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("bafabcdef");
-      (deployQFVotingContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("bafabcdef");
+      (deployQFVotingContract as Mock).mockResolvedValue({
         votingContractAddress: "0xVotingContract",
       });
-      (deployMerklePayoutStrategyContract as jest.Mock).mockResolvedValue({
+      (deployMerklePayoutStrategyContract as Mock).mockResolvedValue({
         payoutContractAddress: "0xPayoutContract",
       });
-      (deployRoundContract as jest.Mock).mockResolvedValue({
+      (deployRoundContract as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
     });
 
     it("sets indexing status to in progress when waiting for subgraph to index", async () => {
-      (waitForSubgraphSyncTo as jest.Mock).mockReturnValue(
+      (waitForSubgraphSyncTo as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -268,9 +268,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets indexing status to completed when subgraph is finished indexing", async () => {
-      (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue(
-        transactionBlockNumber
-      );
+      (waitForSubgraphSyncTo as Mock).mockResolvedValue(transactionBlockNumber);
 
       renderWithProvider(<TestUseCreateRoundComponent />);
       invokeCreateRound();
@@ -284,25 +282,25 @@ describe("<CreateRoundProvider />", () => {
   });
 
   describe("useCreateRound() Errors", () => {
-    let consoleErrorSpy: jest.SpyInstance;
+    let consoleErrorSpy: SpyInstance;
 
     beforeEach(() => {
-      consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+      consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
         /* do nothing.*/
       });
 
       // set up initial mocks for each internal function call
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (deployQFVotingContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (deployQFVotingContract as Mock).mockResolvedValue({
         votingContractAddress: "0xVotingContract",
       });
-      (deployMerklePayoutStrategyContract as jest.Mock).mockResolvedValue({
+      (deployMerklePayoutStrategyContract as Mock).mockResolvedValue({
         payoutContractAddress: "0xPayoutContract",
       });
-      (deployRoundContract as jest.Mock).mockResolvedValue({
+      (deployRoundContract as Mock).mockResolvedValue({
         transactionBlockNumber: 100,
       });
-      (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue(100);
+      (waitForSubgraphSyncTo as Mock).mockResolvedValue(100);
     });
 
     afterEach(() => {
@@ -310,7 +308,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets ipfs status to error when ipfs save fails", async () => {
-      (saveToIPFS as jest.Mock).mockRejectedValue(new Error(":("));
+      (saveToIPFS as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(<TestUseCreateRoundComponent />);
       invokeCreateRound();
@@ -323,7 +321,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets voting contract deployment status to error when voting deployment fails", async () => {
-      (deployQFVotingContract as jest.Mock).mockRejectedValue(
+      (deployQFVotingContract as Mock).mockRejectedValue(
         new Error("Failed to deploy :(")
       );
 
@@ -338,7 +336,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets round contract deployment status to error when round deployment fails", async () => {
-      (deployRoundContract as jest.Mock).mockRejectedValue(
+      (deployRoundContract as Mock).mockRejectedValue(
         new Error("Failed to deploy :(")
       );
 
@@ -353,7 +351,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("sets indexing status to error when waiting for subgraph to sync fails", async () => {
-      (waitForSubgraphSyncTo as jest.Mock).mockRejectedValue(new Error(":("));
+      (waitForSubgraphSyncTo as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(<TestUseCreateRoundComponent />);
       invokeCreateRound();
@@ -366,7 +364,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("if ipfs save fails, resets ipfs status when create round is retried", async () => {
-      (saveToIPFS as jest.Mock)
+      (saveToIPFS as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {
@@ -388,7 +386,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("if voting contract deployment fails, resets voting contract deployment status when create round is retried", async () => {
-      (deployQFVotingContract as jest.Mock)
+      (deployQFVotingContract as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {
@@ -413,7 +411,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("if round contract deployment fails, resets round contract deployment status when create round is retried", async () => {
-      (deployRoundContract as jest.Mock)
+      (deployRoundContract as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {
@@ -438,7 +436,7 @@ describe("<CreateRoundProvider />", () => {
     });
 
     it("if indexing fails, resets indexing status when create round is retried", async () => {
-      (waitForSubgraphSyncTo as jest.Mock)
+      (waitForSubgraphSyncTo as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {

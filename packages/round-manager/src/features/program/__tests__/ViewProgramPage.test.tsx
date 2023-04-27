@@ -14,14 +14,14 @@ import { formatUTCDateAsISOString } from "common";
 const programId = faker.datatype.number().toString();
 const useParamsFn = () => ({ id: programId });
 
-jest.mock("../../common/Navbar");
-jest.mock("../../common/Auth");
-jest.mock("../../api/program");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../common/Navbar");
+vi.mock("../../common/Auth");
+vi.mock("../../api/program");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useParams: useParamsFn,
 }));
 
@@ -29,11 +29,11 @@ describe("<ViewProgram />", () => {
   let stubProgram: Program;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     stubProgram = makeProgramData({ id: programId });
 
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: {},
       address: stubProgram.operatorWallets[0],
       provider: { getNetwork: () => ({ chainId: "0x0" }) },
@@ -52,7 +52,7 @@ describe("<ViewProgram />", () => {
   });
 
   it("should display access denied when wallet accessing is not program operator", () => {
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: {},
       address: faker.finance.ethereumAddress(),
       provider: { getNetwork: () => ({ chainId: "0x0" }) },
@@ -98,7 +98,7 @@ describe("<ViewProgram />", () => {
     ];
 
     const stubProgram = makeProgramData({ id: programId, operatorWallets });
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: {},
       address: stubProgram.operatorWallets[0],
       provider: { getNetwork: () => ({ chainId: "0x0" }) },

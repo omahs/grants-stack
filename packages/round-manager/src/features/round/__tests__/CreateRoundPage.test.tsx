@@ -9,9 +9,9 @@ import * as FormWizardImport from "../../common/FormWizard";
 import { fireEvent, screen } from "@testing-library/react";
 import QuadraticFundingForm from "../QuadraticFundingForm";
 
-jest.mock("../../common/Navbar");
-jest.mock("../../common/Auth");
-const formWizardSpy = jest.spyOn(FormWizardImport, "FormWizard");
+vi.mock("../../common/Navbar");
+vi.mock("../../common/Auth");
+const formWizardSpy = vi.spyOn(FormWizardImport, "FormWizard");
 
 const programId = faker.finance.ethereumAddress();
 const useParamsFn = () => [
@@ -19,14 +19,14 @@ const useParamsFn = () => [
     get: () => programId,
   },
 ];
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useSearchParams: useParamsFn,
 }));
 
 describe("<CreateRoundPage />", () => {
   beforeEach(() => {
-    (useWallet as jest.Mock).mockReturnValue({
+    (useWallet as Mock).mockReturnValue({
       chain: {},
       address: "0x0",
       provider: { getNetwork: () => ({ chainId: "0x0" }) },

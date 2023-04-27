@@ -17,11 +17,11 @@ import * as roundTs from "../../api/round";
 import { MatchingStatsData, ProgressStatus, Round } from "../../api/types";
 import ViewFundGrantees from "../ViewFundGrantees";
 
-jest.mock("../../common/Auth");
-jest.mock("wagmi");
+vi.mock("../../common/Auth");
+vi.mock("wagmi");
 
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 Object.assign(navigator, {
@@ -34,16 +34,16 @@ Object.assign(navigator, {
 
 const mockRoundData: Round = makeRoundData();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useParams: vi.fn(),
 }));
 
-jest.mock("../../api/api", () => ({
-  ...jest.requireActual("../../api/api"),
+vi.mock("../../api/api", () => ({
+  ...vi.importActual("../../api/api"),
 }));
 
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: mockRoundData.operatorWallets![0],
@@ -51,17 +51,17 @@ jest.mock("../../common/Auth", () => ({
   }),
 }));
 
-const useFetchMatchingDistributionFromContractMock = jest.spyOn(
+const useFetchMatchingDistributionFromContractMock = vi.spyOn(
   merklePayoutStrategy,
   "useFetchMatchingDistributionFromContract"
 );
 
-const useGroupProjectsByPaymentStatusMock = jest.spyOn(
+const useGroupProjectsByPaymentStatusMock = vi.spyOn(
   merklePayoutStrategy,
   "useGroupProjectsByPaymentStatus"
 );
 
-const fetchMatchingDistributionMock = jest.spyOn(
+const fetchMatchingDistributionMock = vi.spyOn(
   roundTs,
   "fetchMatchingDistribution"
 );
@@ -126,15 +126,15 @@ describe("View Fund Grantees", () => {
       unpaid: [matchingStatsData[2], matchingStatsData[3]],
     });
 
-    (useParams as jest.Mock).mockImplementation(() => {
+    (useParams as Mock).mockImplementation(() => {
       return {
         id: mockRoundData.id,
       };
     });
 
-    (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-    (useDisconnect as jest.Mock).mockReturnValue({});
-    (useParams as jest.Mock).mockReturnValueOnce({
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
+    (useParams as Mock).mockReturnValueOnce({
       id: undefined,
     });
   });
@@ -175,7 +175,7 @@ describe("View Fund Grantees", () => {
   });
 
   it("displays finalized status when round is finalized", async () => {
-    (useParams as jest.Mock).mockReturnValueOnce({
+    (useParams as Mock).mockReturnValueOnce({
       id: undefined,
     });
 
@@ -272,7 +272,7 @@ describe("View Fund Grantees", () => {
     });
 
     it("Should show the confirmation modal and close on cancel", async () => {
-      (useBalance as jest.Mock).mockImplementation(() => ({
+      (useBalance as Mock).mockImplementation(() => ({
         data: { formatted: "0", value: ethers.utils.parseEther("1000") },
         error: null,
         loading: false,
@@ -298,7 +298,7 @@ describe("View Fund Grantees", () => {
     });
 
     it("Should show the progress modal", async () => {
-      (useBalance as jest.Mock).mockImplementation(() => ({
+      (useBalance as Mock).mockImplementation(() => ({
         data: { formatted: "0", value: ethers.utils.parseEther("1000") },
         error: null,
         loading: false,
@@ -322,7 +322,7 @@ describe("View Fund Grantees", () => {
     });
 
     it("Should show the warning when not enough funds in contract", async () => {
-      (useBalance as jest.Mock).mockImplementation(() => ({
+      (useBalance as Mock).mockImplementation(() => ({
         data: { formatted: "0", value: "0" },
         error: null,
         loading: false,

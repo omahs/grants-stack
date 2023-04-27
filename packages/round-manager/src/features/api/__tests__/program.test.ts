@@ -4,14 +4,16 @@ import { makeProgramData } from "../../../test-utils";
 import { fetchFromIPFS, ChainId, CHAINS } from "../utils";
 import { graphql_fetch } from "common";
 
-jest.mock("../utils", () => ({
-  ...jest.requireActual("../utils"),
-  fetchFromIPFS: jest.fn(),
+import { vi, Mock } from "vitest";
+
+vi.mock("../utils", () => ({
+  ...vi.importActual("../utils"),
+  fetchFromIPFS: vi.fn(),
 }));
 
-jest.mock("common", () => ({
-  ...jest.requireActual("common"),
-  graphql_fetch: jest.fn(),
+vi.mock("common", () => ({
+  ...vi.importActual("common"),
+  graphql_fetch: vi.fn(),
 }));
 
 describe("listPrograms", () => {
@@ -21,7 +23,7 @@ describe("listPrograms", () => {
       chain: CHAINS[ChainId.GOERLI_CHAIN_ID],
     });
     const expectedPrograms: Program[] = [expectedProgram];
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         programs: [
           {
@@ -45,7 +47,7 @@ describe("listPrograms", () => {
       },
     });
 
-    (fetchFromIPFS as jest.Mock).mockResolvedValue({
+    (fetchFromIPFS as Mock).mockResolvedValue({
       name: expectedProgram.metadata?.name,
     });
 
@@ -65,7 +67,7 @@ describe("getProgramById", () => {
       chain: CHAINS[ChainId.GOERLI_CHAIN_ID],
     });
     const programId = expectedProgram.id;
-    (graphql_fetch as jest.Mock).mockResolvedValue({
+    (graphql_fetch as Mock).mockResolvedValue({
       data: {
         programs: [
           {
@@ -88,7 +90,7 @@ describe("getProgramById", () => {
         ],
       },
     });
-    (fetchFromIPFS as jest.Mock).mockResolvedValue({
+    (fetchFromIPFS as Mock).mockResolvedValue({
       name: expectedProgram.metadata?.name,
     });
 
@@ -99,7 +101,7 @@ describe("getProgramById", () => {
     });
 
     expect(actualProgram).toEqual(expectedProgram);
-    const graphqlFetchCall = (graphql_fetch as jest.Mock).mock.calls[0];
+    const graphqlFetchCall = (graphql_fetch as Mock).mock.calls[0];
     const actualQuery = graphqlFetchCall[0];
     expect(actualQuery).toContain("id: $programId");
   });

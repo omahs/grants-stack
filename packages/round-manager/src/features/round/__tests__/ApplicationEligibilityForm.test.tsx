@@ -13,7 +13,7 @@ import { faker } from "@faker-js/faker";
 
 describe("<ApplicationEligibilityForm>", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should show the page title", () => {
@@ -35,10 +35,10 @@ describe("<ApplicationEligibilityForm>", () => {
       <FormContext.Provider
         value={{
           currentStep: 2,
-          setCurrentStep: jest.fn(),
+          setCurrentStep: vi.fn(),
           stepsCount: 3,
           formData: {},
-          setFormData: jest.fn(),
+          setFormData: vi.fn(),
         }}
       >
         <ApplicationEligibilityForm stepper={FormStepper} />
@@ -97,14 +97,14 @@ describe("<ApplicationEligibilityForm>", () => {
 });
 
 describe("form submission", () => {
-  const setFormData = jest.fn();
+  const setFormData = vi.fn();
   let formContext: any;
   beforeEach(() => {
-    jest.clearAllMocks();
-    
+    vi.clearAllMocks();
+
     formContext = {
       currentStep: 2,
-      setCurrentStep: jest.fn(),
+      setCurrentStep: vi.fn(),
       stepsCount: 3,
       formData: {},
       setFormData,

@@ -6,37 +6,34 @@ import { fetchMatchingDistribution } from "../../round";
 import React, { useState as useStateMock } from "react";
 
 // Mocks
-jest.mock("../../round");
+vi.mock("../../round");
 
-jest.mock("common");
+vi.mock("common");
 
-jest.mock("../../../api/types", () => ({
-  ...jest.requireActual("../../../api/types"),
+vi.mock("../../../api/types", () => ({
+  ...vi.importActual("../../../api/types"),
 }));
 
-jest.mock("../../utils", () => ({
-  ...jest.requireActual("../../utils"),
-  graphql_fetch: jest.fn(),
-  fetchFromIPFS: jest.fn(),
+vi.mock("../../utils", () => ({
+  ...vi.importActual("../../utils"),
+  graphql_fetch: vi.fn(),
+  fetchFromIPFS: vi.fn(),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useOutletContext: () => ({
     data: {},
   }),
 }));
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useState: jest.fn(),
-  useEffect: jest.fn(),
-}))
+vi.mock("react", () => ({
+  ...vi.importActual("react"),
+  useState: vi.fn(),
+  useEffect: vi.fn(),
+}));
 
-const paidProjects = [
-  makeQFDistribution(),
-  makeQFDistribution(),
-];
+const paidProjects = [makeQFDistribution(), makeQFDistribution()];
 
 const unProjects = [
   makeQFDistribution(),
@@ -44,18 +41,18 @@ const unProjects = [
   makeQFDistribution(),
 ];
 
-describe('merklePayoutStrategy', () => {
-  const setState = jest.fn();
+describe("merklePayoutStrategy", () => {
+  const setState = vi.fn();
 
   // clean up function
   beforeEach(() => {
     (useStateMock as any).mockImplementation((init: any) => [init, setState]);
   });
 
-  describe.only('useGroupProjectsByPaymentStatus', () => {
-    it('SHOULD group projects into paid and unpaid arrays', () => {
-      const returnValue = {paid: [], unpaid: []};
-      const useStateSpy = jest.spyOn(React, "useState");
+  describe.only("useGroupProjectsByPaymentStatus", () => {
+    it("SHOULD group projects into paid and unpaid arrays", () => {
+      const returnValue = { paid: [], unpaid: [] };
+      const useStateSpy = vi.spyOn(React, "useState");
       useStateSpy.mockImplementationOnce(() => [returnValue, setState]);
       useStateSpy.mockImplementationOnce(() => [paidProjects, setState]);
 
@@ -64,10 +61,12 @@ describe('merklePayoutStrategy', () => {
 
       const projects = [...paidProjects, ...unProjects];
       // TODO: Fix this test
-      (fetchProjectPaidInARound as any).mockImplementation(() => ({paidProjects}));
+      (fetchProjectPaidInARound as any).mockImplementation(() => ({
+        paidProjects,
+      }));
       (fetchMatchingDistribution as any).mockImplementation(() => ({
         distributionMetaPtr: "",
-        matchingDistribution: projects
+        matchingDistribution: projects,
       }));
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

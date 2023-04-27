@@ -1,10 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { CreateRoundContext, CreateRoundState, initialCreateRoundState } from "../../../context/round/CreateRoundContext";
+import {
+  CreateRoundContext,
+  CreateRoundState,
+  initialCreateRoundState,
+} from "../../../context/round/CreateRoundContext";
 import { EditQuestion } from "../../api/types";
 import AddQuestionModal from "../AddQuestionModal";
 
-jest.mock("../../api/round");
+vi.mock("../../api/round");
 
 const editQuestion: EditQuestion = {
   index: 0,
@@ -20,7 +24,7 @@ const editQuestion: EditQuestion = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("AddQuestionModal", () => {

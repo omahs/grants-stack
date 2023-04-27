@@ -18,25 +18,25 @@ const mockWallet = {
   },
 };
 
-jest.mock("../../../features/api/program");
-jest.mock("../../../features/api/ipfs");
-jest.mock("../../../features/api/subgraph");
-jest.mock("../../../features/common/Auth", () => ({
+vi.mock("../../../features/api/program");
+vi.mock("../../../features/api/ipfs");
+vi.mock("../../../features/api/subgraph");
+vi.mock("../../../features/common/Auth", () => ({
   useWallet: () => mockWallet,
 }));
-jest.mock("wagmi");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("wagmi");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 describe("<CreateProgramProvider />", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("useCreateProgram()", () => {
     it("sets ipfs status to in progress when saving to ipfs", async () => {
-      (saveToIPFS as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -55,8 +55,8 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("sets ipfs status to complete when saving to ipfs succeeds", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("my ipfs doc :)))");
-      (deployProgramContract as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockResolvedValue("my ipfs doc :)))");
+      (deployProgramContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -76,8 +76,8 @@ describe("<CreateProgramProvider />", () => {
 
     it("sets contract deployment status to in progress when contract is being deployed", async () => {
       const ipfsHash = "bafabcdef";
-      (saveToIPFS as jest.Mock).mockResolvedValue(ipfsHash);
-      (deployProgramContract as jest.Mock).mockReturnValue(
+      (saveToIPFS as Mock).mockResolvedValue(ipfsHash);
+      (deployProgramContract as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -93,7 +93,7 @@ describe("<CreateProgramProvider />", () => {
           `deploying-status-is-${ProgressStatus.IN_PROGRESS}`
         )
       );
-      const firstCall = (deployProgramContract as jest.Mock).mock.calls[0];
+      const firstCall = (deployProgramContract as Mock).mock.calls[0];
       const actualMetadataPointer = firstCall[0].program.store;
       expect(actualMetadataPointer).toEqual({
         protocol: 1,
@@ -102,8 +102,8 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("sets contract deployment status to success when contract has been deployed", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("bafabcdef");
-      (deployProgramContract as jest.Mock).mockResolvedValue({});
+      (saveToIPFS as Mock).mockResolvedValue("bafabcdef");
+      (deployProgramContract as Mock).mockResolvedValue({});
 
       renderWithProvider(<TestUseCreateProgramComponent />);
 
@@ -119,11 +119,11 @@ describe("<CreateProgramProvider />", () => {
 
     it("sets indexing status to in progress when waiting for subgraph to index", async () => {
       const transactionBlockNumber = 10;
-      (saveToIPFS as jest.Mock).mockResolvedValue("bafabcdef");
-      (deployProgramContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("bafabcdef");
+      (deployProgramContract as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
-      (waitForSubgraphSyncTo as jest.Mock).mockReturnValue(
+      (waitForSubgraphSyncTo as Mock).mockReturnValue(
         new Promise(() => {
           /* do nothing.*/
         })
@@ -143,13 +143,11 @@ describe("<CreateProgramProvider />", () => {
 
     it("sets indexing status to completed when subgraph is finished indexing", async () => {
       const transactionBlockNumber = 10;
-      (saveToIPFS as jest.Mock).mockResolvedValue("bafabcdef");
-      (deployProgramContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("bafabcdef");
+      (deployProgramContract as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
-      (waitForSubgraphSyncTo as jest.Mock).mockResolvedValue(
-        transactionBlockNumber
-      );
+      (waitForSubgraphSyncTo as Mock).mockResolvedValue(transactionBlockNumber);
 
       renderWithProvider(<TestUseCreateProgramComponent />);
 
@@ -165,10 +163,10 @@ describe("<CreateProgramProvider />", () => {
   });
 
   describe("useCreateProgram() Errors", () => {
-    let consoleErrorSpy: jest.SpyInstance;
+    let consoleErrorSpy: SpyInstance;
 
     beforeEach(() => {
-      consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+      consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
         /* do nothing.*/
       });
     });
@@ -178,7 +176,7 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("sets ipfs status to error when ipfs save fails", async () => {
-      (saveToIPFS as jest.Mock).mockRejectedValue(new Error(":("));
+      (saveToIPFS as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(<TestUseCreateProgramComponent />);
       const createProgram = screen.getByTestId("create-program");
@@ -192,8 +190,8 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("sets contract deployment status to error when deployment fails", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (deployProgramContract as jest.Mock).mockRejectedValue(
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (deployProgramContract as Mock).mockRejectedValue(
         new Error("Failed to deploy :(")
       );
 
@@ -209,11 +207,11 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("sets indexing status to error when waiting for subgraph to sync fails", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (deployProgramContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (deployProgramContract as Mock).mockResolvedValue({
         transactionBlockNumber: 100,
       });
-      (waitForSubgraphSyncTo as jest.Mock).mockRejectedValue(new Error(":("));
+      (waitForSubgraphSyncTo as Mock).mockRejectedValue(new Error(":("));
 
       renderWithProvider(<TestUseCreateProgramComponent />);
       const createProgram = screen.getByTestId("create-program");
@@ -227,7 +225,7 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("if ipfs save fails, resets ipfs status when create round is retried", async () => {
-      (saveToIPFS as jest.Mock)
+      (saveToIPFS as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {
@@ -249,11 +247,11 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("if contract deployment fails, resets contract deployment status when create round is retried", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (deployProgramContract as jest.Mock).mockResolvedValue({
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (deployProgramContract as Mock).mockResolvedValue({
         transactionBlockNumber: 100,
       });
-      (waitForSubgraphSyncTo as jest.Mock)
+      (waitForSubgraphSyncTo as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {
@@ -277,8 +275,8 @@ describe("<CreateProgramProvider />", () => {
     });
 
     it("if indexing fails, resets indexing status when create round is retried", async () => {
-      (saveToIPFS as jest.Mock).mockResolvedValue("asdf");
-      (deployProgramContract as jest.Mock)
+      (saveToIPFS as Mock).mockResolvedValue("asdf");
+      (deployProgramContract as Mock)
         .mockRejectedValueOnce(new Error(":("))
         .mockReturnValue(
           new Promise(() => {

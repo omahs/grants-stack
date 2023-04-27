@@ -10,27 +10,27 @@ import {
 } from "../../../context/program/CreateProgramContext";
 import { MemoryRouter } from "react-router-dom";
 
-jest.mock("../../api/ipfs");
-jest.mock("../../common/Auth");
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("../../api/ipfs");
+vi.mock("../../common/Auth");
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
 
 describe("<CreateProgramPage />", () => {
-  let consoleErrorSpy: jest.SpyInstance;
+  let consoleErrorSpy: SpyInstance;
 
   beforeEach(() => {
-    (useWallet as jest.Mock).mockReturnValue({ chain: {} });
-    (saveToIPFS as jest.Mock).mockImplementation(() => {
+    (useWallet as Mock).mockReturnValue({ chain: {} });
+    (saveToIPFS as Mock).mockImplementation(() => {
       /* do nothing */
     });
 
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {
       /* do nothing */
     });
   });
@@ -75,7 +75,7 @@ describe("<CreateProgramPage />", () => {
   });
 
   it("choosing try again restarts the action and closes the error modal", async () => {
-    const saveToIPFSStub = saveToIPFS as jest.Mock;
+    const saveToIPFSStub = saveToIPFS as Mock;
     saveToIPFSStub.mockRejectedValue(new Error("Save to IPFS failed :("));
 
     renderWithContext(<CreateProgramPage />, {
@@ -114,7 +114,7 @@ export const renderWithContext = (
   ui: JSX.Element,
   programStateOverrides: Partial<CreateProgramState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>

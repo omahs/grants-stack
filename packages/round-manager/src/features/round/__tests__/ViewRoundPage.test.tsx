@@ -14,11 +14,11 @@ import {
 import { useDisconnect, useSwitchNetwork } from "wagmi";
 import { useParams } from "react-router-dom";
 
-jest.mock("../../common/Auth");
-jest.mock("wagmi");
+vi.mock("../../common/Auth");
+vi.mock("wagmi");
 
-jest.mock("@rainbow-me/rainbowkit", () => ({
-  ConnectButton: jest.fn(),
+vi.mock("@rainbow-me/rainbowkit", () => ({
+  ConnectButton: vi.fn(),
 }));
 
 Object.assign(navigator, {
@@ -31,17 +31,17 @@ Object.assign(navigator, {
 
 const mockRoundData: Round = makeRoundData();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useParams: vi.fn(),
 }));
 
-jest.mock("../../api/api", () => ({
-  ...jest.requireActual("../../api/api"),
-  useRoundMatchData: jest.fn(),
+vi.mock("../../api/api", () => ({
+  ...vi.importActual("../../api/api"),
+  useRoundMatchData: vi.fn(),
 }));
 
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: mockRoundData.operatorWallets![0],
@@ -51,18 +51,18 @@ jest.mock("../../common/Auth", () => ({
 
 describe("View Round", () => {
   beforeEach(() => {
-    (useParams as jest.Mock).mockImplementation(() => {
+    (useParams as Mock).mockImplementation(() => {
       return {
         id: mockRoundData.id,
       };
     });
 
-    (useSwitchNetwork as jest.Mock).mockReturnValue({ chains: [] });
-    (useDisconnect as jest.Mock).mockReturnValue({});
+    (useSwitchNetwork as Mock).mockReturnValue({ chains: [] });
+    (useDisconnect as Mock).mockReturnValue({});
   });
 
   it("displays a 404 when there no round is found", () => {
-    (useParams as jest.Mock).mockReturnValueOnce({
+    (useParams as Mock).mockReturnValueOnce({
       id: undefined,
     });
 

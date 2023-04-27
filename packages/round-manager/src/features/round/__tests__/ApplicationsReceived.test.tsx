@@ -27,8 +27,8 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ApplicationStatus, ProgressStatus } from "../../api/types";
 
-jest.mock("../../api/application");
-jest.mock("../../common/Auth", () => ({
+vi.mock("../../api/application");
+vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
     chain: {},
     address: "0x0",
@@ -40,12 +40,12 @@ jest.mock("../../common/Auth", () => ({
     provider: { getNetwork: () => ({ chainId: "0" }) },
   }),
 }));
-jest.mock("../../../constants", () => ({
-  ...jest.requireActual("../../../constants"),
+vi.mock("../../../constants", () => ({
+  ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
   useParams: () => ({
     id: "0x0000000000000000000000000000000000000000",
   }),
@@ -62,7 +62,7 @@ grantApplications.forEach((application) => {
   application.status = "PENDING";
 });
 
-const bulkUpdateGrantApplications = jest.fn();
+const bulkUpdateGrantApplications = vi.fn();
 
 function setupInBulkSelectionMode() {
   renderWithContext(<ApplicationsReceived />, {
@@ -78,9 +78,7 @@ function setupInBulkSelectionMode() {
 
 describe("<ApplicationsReceived />", () => {
   beforeEach(() => {
-    (getApplicationsByRoundId as jest.Mock).mockResolvedValue(
-      grantApplications
-    );
+    (getApplicationsByRoundId as Mock).mockResolvedValue(grantApplications);
   });
 
   it("should display a loading spinner if received applications are loading", () => {
@@ -343,7 +341,7 @@ describe("<ApplicationsReceived />", () => {
       });
 
       it("starts the bulk update process when confirm is selected", async () => {
-        (updateApplicationStatuses as jest.Mock).mockResolvedValue("");
+        (updateApplicationStatuses as Mock).mockResolvedValue("");
         setupInBulkSelectionMode();
 
         const approveButton = screen.queryAllByTestId("approve-button")[0];
@@ -366,7 +364,7 @@ describe("<ApplicationsReceived />", () => {
 
         expect(updateApplicationStatuses).toBeCalled();
         const updateApplicationStatusesFirstCall = (
-          updateApplicationStatuses as jest.Mock
+          updateApplicationStatuses as Mock
         ).mock.calls[0];
         const actualRoundId = updateApplicationStatusesFirstCall[0];
         expect(actualRoundId).toEqual(roundIdOverride);
@@ -409,7 +407,7 @@ describe("<ApplicationsReceived />", () => {
   describe("when processing bulk action fails", () => {
     beforeEach(() => {
       const transactionBlockNumber = 10;
-      (updateApplicationStatuses as jest.Mock).mockResolvedValue({
+      (updateApplicationStatuses as Mock).mockResolvedValue({
         transactionBlockNumber,
       });
 
@@ -466,7 +464,7 @@ export const renderWithContext = (
   grantApplicationStateOverrides: Partial<ApplicationState> = {},
   bulkUpdateGrantApplicationStateOverrides: Partial<BulkUpdateGrantApplicationState> = {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dispatch: any = jest.fn()
+  dispatch: any = vi.fn()
 ) =>
   render(
     <MemoryRouter>
