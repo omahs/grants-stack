@@ -1,3 +1,4 @@
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { Stack } from "@chakra-ui/react";
 import { datadogRum } from "@datadog/browser-rum";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
@@ -38,7 +39,6 @@ import {
 } from "../../types/roundApplication";
 import { getProjectURIComponents } from "../../utils/utils";
 import { getNetworkIcon, networkPrettyName } from "../../utils/wallet";
-import Button, { ButtonVariants } from "../base/Button";
 import CallbackModal from "../base/CallbackModal";
 import ErrorModal from "../base/ErrorModal";
 import FormValidationErrorList from "../base/FormValidationErrorList";

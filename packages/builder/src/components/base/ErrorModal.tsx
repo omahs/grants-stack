@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { BaseModal } from "./BaseModal";
+import { BaseModal } from "common/src/components/BaseModal";
 
 type ErrorModalProps = {
   open: boolean;

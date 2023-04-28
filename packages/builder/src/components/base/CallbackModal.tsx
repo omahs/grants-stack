@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { BaseModal } from "./BaseModal";
-import Button, { ButtonVariants } from "./Button";
+import { BaseModal } from "common/src/components/BaseModal";
+import Button, { ButtonVariants } from "common/src/components/Button";
 
 interface CallbackModalProps {
   modalOpen: boolean;

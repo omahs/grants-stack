@@ -1,5 +1,5 @@
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { BaseModal } from "./BaseModal";
+import { BaseModal } from "common/src/components/BaseModal";
 import { Status, Step } from "../../utils/steps";
 import { RoundApplicationError } from "../../reducers/roundApplication";
 import { NewGrantError } from "../../reducers/newGrant";

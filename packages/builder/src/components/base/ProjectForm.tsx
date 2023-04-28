@@ -1,4 +1,5 @@
 import { datadogRum } from "@datadog/browser-rum";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { useEffect, useRef, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNetwork } from "wagmi";
@@ -7,7 +8,6 @@ import { metadataImageSaved, metadataSaved } from "../../actions/projectForm";
 import { RootState } from "../../reducers";
 import { ChangeHandlers, ProjectFormStatus } from "../../types";
 import { Select, TextArea, TextInput, WebsiteInput } from "../grants/inputs";
-import Button, { ButtonVariants } from "./Button";
 import ExitModal from "./ExitModal";
 import { validateProjectForm } from "./formValidation";
 import FormValidationErrorList from "./FormValidationErrorList";

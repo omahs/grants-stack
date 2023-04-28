@@ -1,4 +1,5 @@
 // --- Methods
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { Tooltip } from "@chakra-ui/react";
 import { datadogLogs } from "@datadog/browser-logs";
 import { datadogRum } from "@datadog/browser-rum";
@@ -8,7 +9,6 @@ import { global } from "../../global";
 // --- Identity tools
 import { RootState } from "../../reducers";
 import { CredentialProvider } from "../../types";
-import Button, { ButtonVariants } from "../base/Button";
 import {
   openOauthWindow,
   ClientType,

@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
+import { BaseModal } from "common/src/components/BaseModal";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { useNavigate } from "react-router-dom";
 import { formReset } from "../../actions/projectForm";
 import { slugs } from "../../routes";
 import colors from "../../styles/colors";
 import Shield from "../icons/Shield";
-import { BaseModal } from "./BaseModal";
-import Button, { ButtonVariants } from "./Button";
 
 interface ExitProps {
   modalOpen: boolean;

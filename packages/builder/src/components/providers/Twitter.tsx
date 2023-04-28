@@ -1,4 +1,5 @@
 import { Tooltip } from "@chakra-ui/react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { datadogLogs } from "@datadog/browser-logs";
 import { datadogRum } from "@datadog/browser-rum";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
@@ -6,7 +7,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { global } from "../../global";
 import { RootState } from "../../reducers";
 import { CredentialProvider } from "../../types";
-import Button, { ButtonVariants } from "../base/Button";
 import {
   fetchAuthUrl,
   openOauthWindow,

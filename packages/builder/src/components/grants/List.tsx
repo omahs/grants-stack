@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { loadAllChainsProjects } from "../../actions/projects";
 import { checkRoundApplications } from "../../actions/roundApplication";
@@ -12,7 +13,6 @@ import { ApplicationModalStatus } from "../../reducers/roundApplication";
 import { newGrantPath, roundPath } from "../../routes";
 import colors from "../../styles/colors";
 import { parseRoundToApply } from "../../utils/utils";
-import Button, { ButtonVariants } from "../base/Button";
 import CallbackModal from "../base/CallbackModal";
 import ErrorModal from "../base/ErrorModal";
 import LoadingSpinner from "../base/LoadingSpinner";

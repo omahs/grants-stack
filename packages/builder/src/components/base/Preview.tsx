@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { publishGrant, resetStatus } from "../../actions/newGrant";
@@ -10,7 +11,6 @@ import { Status } from "../../reducers/newGrant";
 import { slugs } from "../../routes";
 import { ProjectFormStatus } from "../../types";
 import Details from "../grants/Details";
-import Button, { ButtonVariants } from "./Button";
 import { addAlert } from "../../actions/ui";
 import { grantSteps } from "../../utils/steps";
 import StatusModal from "./StatusModal";

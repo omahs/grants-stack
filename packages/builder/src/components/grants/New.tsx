@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import colors from "../../styles/colors";
-import Button, { ButtonVariants } from "../base/Button";
 import ProjectForm from "../base/ProjectForm";
 import Cross from "../icons/Cross";
 import ExitModal from "../base/ExitModal";

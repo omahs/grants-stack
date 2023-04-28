@@ -1,10 +1,10 @@
 import { useState } from "react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { shallowEqual, useSelector } from "react-redux";
 import { useSwitchNetwork } from "wagmi";
 import { RootState } from "../../reducers";
 import { ChangeHandlers, ProjectFormStatus } from "../../types";
 import { Select } from "../grants/inputs";
-import Button, { ButtonVariants } from "./Button";
 import NetworkSwitchModal from "./NetworkSwitchModal";
 
 function NetworkForm({

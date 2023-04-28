@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Button, { ButtonVariants } from "common/src/components/Button";
+import SwitchNetworkModal from "common/src/components/SwitchNetworkModal";
 import { useSwitchNetwork } from "wagmi";
 import { loadAllChainsProjects } from "../../actions/projects";
 import { loadRound, unloadRounds } from "../../actions/rounds";
@@ -13,10 +15,8 @@ import { Status } from "../../reducers/rounds";
 import { grantsPath, newGrantPath, roundApplicationPath } from "../../routes";
 import { formatTimeUTC } from "../../utils/components";
 import { networkPrettyName } from "../../utils/wallet";
-import Button, { ButtonVariants } from "../base/Button";
 import ErrorModal from "../base/ErrorModal";
 import LoadingSpinner from "../base/LoadingSpinner";
-import SwitchNetworkModal from "../base/SwitchNetworkModal";
 
 function Round() {
   const [roundData, setRoundData] = useState<any>();

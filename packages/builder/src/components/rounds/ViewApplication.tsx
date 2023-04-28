@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -7,7 +8,6 @@ import {
 } from "../../actions/roundApplication";
 import { loadRound, unloadRounds } from "../../actions/rounds";
 import { RootState } from "../../reducers";
-import Button, { ButtonVariants } from "../base/Button";
 import { Status as ApplicationStatus } from "../../reducers/roundApplication";
 import { Status as RoundStatus } from "../../reducers/rounds";
 import { grantsPath, projectPathByID } from "../../routes";

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import {
   resetApplication,
   submitApplication,
@@ -19,7 +20,6 @@ import { Round } from "../../types";
 import { applicationSteps } from "../../utils/steps";
 import { getProjectURIComponents } from "../../utils/utils";
 import Form from "../application/Form";
-import Button, { ButtonVariants } from "../base/Button";
 import ErrorModal from "../base/ErrorModal";
 import ExitModal from "../base/ExitModal";
 import Cross from "../icons/Cross";

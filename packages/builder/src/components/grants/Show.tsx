@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { fetchGrantData } from "../../actions/grantsMetadata";
@@ -13,7 +14,6 @@ import { editPath, grantsPath } from "../../routes";
 import colors from "../../styles/colors";
 import { getProjectImage, ImgTypes } from "../../utils/components";
 import { getProjectURIComponents } from "../../utils/utils";
-import Button, { ButtonVariants } from "../base/Button";
 import Arrow from "../icons/Arrow";
 import Pencil from "../icons/Pencil";
 import Details from "./Details";

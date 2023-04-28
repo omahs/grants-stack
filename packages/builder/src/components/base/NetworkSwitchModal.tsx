@@ -1,8 +1,8 @@
 // import colors from "../../styles/colors";
 import { useMemo } from "react";
 import { useSwitchNetwork } from "wagmi";
-import { BaseModal } from "./BaseModal";
-import Button, { ButtonVariants } from "./Button";
+import { BaseModal } from "common/src/components/BaseModal";
+import Button, { ButtonVariants } from "common/src/components/Button";
 
 interface NetworkSwitchModalProps {
   modalOpen: boolean;

@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-
+import Button, { ButtonVariants } from "common/src/components/Button";
+import { BaseModal, ToggleModalProps } from "common/src/components/BaseModal";
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
   PixelCrop,
 } from "react-image-crop";
 import { Dimensions } from "../ImageInput";
-import { BaseModal, ToggleModalProps } from "../BaseModal";
 import buildCanvas from "./buildCanvas";
 
 import "react-image-crop/dist/ReactCrop.css";
-import Button, { ButtonVariants } from "../Button";
 
 // This is to demonstate how to make and center a % aspect crop
 // which is a bit trickier, so we use some helper functions.

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button, { ButtonVariants } from "common/src/components/Button";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ValidationError } from "yup";
 import { metadataSaved } from "../../actions/projectForm";
@@ -9,7 +10,6 @@ import { ChangeHandlers, ProjectFormStatus } from "../../types";
 import { TextInput } from "../grants/inputs";
 import Github from "../providers/Github";
 import Twitter from "../providers/Twitter";
-import Button, { ButtonVariants } from "./Button";
 import { validateVerificationForm } from "./formValidation";
 import FormValidationErrorList from "./FormValidationErrorList";
 
