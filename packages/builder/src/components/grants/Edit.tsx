@@ -3,7 +3,7 @@ import SwitchNetworkModal from "common/src/components/SwitchNetworkModal";
 import Button, { ButtonVariants } from "common/src/components/Button";
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSwitchNetwork } from "wagmi";
 import { fetchGrantData } from "../../actions/grantsMetadata";
 import {
@@ -26,6 +26,7 @@ function EditProject() {
   const params = useParams();
   const dispatch = useDispatch();
   const { switchNetwork } = useSwitchNetwork();
+  const navigate = useNavigate();
 
   const [modalOpen, toggleModal] = useState(false);
   const [formStatus, setFormStatus] = useState<ProjectFormStatus>(
@@ -63,6 +64,7 @@ function EditProject() {
       <SwitchNetworkModal
         networkName={roundNetworkName}
         onSwitchNetwork={onSwitchNetwork}
+        onCancel={() => navigate(-1)}
         action="edit this project"
       />
     );

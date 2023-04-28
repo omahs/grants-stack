@@ -133,6 +133,7 @@ function Round() {
       <SwitchNetworkModal
         networkName={roundNetworkName}
         onSwitchNetwork={onSwitchNetwork}
+        onCancel={() => navigate(-1)}
       />
     );
   };

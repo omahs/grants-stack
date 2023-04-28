@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 export enum ButtonVariants {
   primary = "primary",
   secondary = "secondary",
@@ -24,14 +22,10 @@ function Button({
   styles,
 }: ButtonProps) {
 
-  const clickHandler = () => {
-    if (onClick) onClick();
-  };
-
   return (
     <button
       disabled={disabled}
-      onClick={clickHandler}
+      onClick={() => onClick ? onClick() : null}
       className={`base-btn ${variant} ${styles?.join(" ")}`}
       type="button"
     >
