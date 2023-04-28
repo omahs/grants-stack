@@ -1,5 +1,6 @@
 import { datadogLogs } from "@datadog/browser-logs";
-import { Link, useParams } from "react-router-dom";
+import SwitchNetworkModal from "common/src/components/SwitchNetworkModal";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useRoundById } from "../../context/RoundContext";
 import Navbar from "../common/Navbar";
 import NotFoundPage from "../common/NotFoundPage";
@@ -50,13 +51,24 @@ export default function ViewRound() {
 
   const isBeforeRoundEndDate = round && round.roundEndTime > currentTime;
 
+  const navigate = useNavigate();
+  
+  const roundNetworkName = () => {
+    return "Ethereum";
+  }
+
+  const onSwitchNetwork = () => {
+    // eslint-disable-next-line
+    console.log("Switching network to XVerse");
+  };
+
   return isLoading ? (
     <Spinner text="We're fetching the Round." />
   ) : (
     <>
       {round && chainId && roundId ? (
         <>
-          {isBeforeRoundStartDate && (
+          {/* {isBeforeRoundStartDate && (
             <BeforeRoundStart
               round={round}
               chainId={chainId}
@@ -72,7 +84,13 @@ export default function ViewRound() {
               isBeforeRoundEndDate={isBeforeRoundEndDate}
               isAfterRoundEndDate={isAfterRoundEndDate}
             />
-          )}
+          )} */}
+            <SwitchNetworkModal
+              networkName={roundNetworkName()}
+              onSwitchNetwork={onSwitchNetwork}
+              onCancel={() => navigate(-1)}
+              action="edit this project"
+            />
         </>
       ) : (
         <NotFoundPage />

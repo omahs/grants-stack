@@ -41,6 +41,7 @@
     ]
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.6.0",
     "@craco/craco": "^7.0.0",
     "@datadog/browser-logs": "^4.19.0",
     "@datadog/browser-rum": "^4.19.0",
