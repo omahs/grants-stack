@@ -10,6 +10,7 @@ vi.mock("../../common/Auth", () => ({
     provider: { getNetwork: () => ({ chainId: "0" }) },
   }),
 }));
+
 vi.mock("wagmi");
 vi.mock("@rainbow-me/rainbowkit", () => ({
   ConnectButton: vi.fn(),

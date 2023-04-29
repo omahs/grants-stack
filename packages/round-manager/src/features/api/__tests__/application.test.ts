@@ -7,10 +7,15 @@ import { Web3Provider } from "@ethersproject/providers";
 import { graphql_fetch } from "common";
 import { vi, Mock } from "vitest";
 
-vi.mock("../utils", () => ({
-  ...vi.importActual("../utils"),
-  fetchFromIPFS: vi.fn(),
-}));
+vi.mock("../utils", async () => {
+  const mod = await vi.importActual("../utils");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    fetchFromIPFS: vi.fn(),
+  };
+});
+
 vi.mock("common", () => ({
   ...vi.importActual("common"),
   graphql_fetch: vi.fn(),
@@ -93,7 +98,7 @@ describe("getApplicationById", () => {
   });
 
   it("throws an error when grant application doesn't exist", async () => {
-    const consoleErrorSpy = jest
+    const consoleErrorSpy = vi
       .spyOn(console, "error")
       .mockImplementation(() => {
         /* do nothing */

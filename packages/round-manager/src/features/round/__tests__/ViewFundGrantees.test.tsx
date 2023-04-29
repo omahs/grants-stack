@@ -16,8 +16,8 @@ import * as merklePayoutStrategy from "../../api/payoutStrategy/merklePayoutStra
 import * as roundTs from "../../api/round";
 import { MatchingStatsData, ProgressStatus, Round } from "../../api/types";
 import ViewFundGrantees from "../ViewFundGrantees";
+import { Mock, vi } from "vitest";
 
-vi.mock("../../common/Auth");
 vi.mock("wagmi");
 
 vi.mock("@rainbow-me/rainbowkit", () => ({
@@ -34,10 +34,14 @@ Object.assign(navigator, {
 
 const mockRoundData: Round = makeRoundData();
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: vi.fn(),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 
 vi.mock("../../api/api", () => ({
   ...vi.importActual("../../api/api"),

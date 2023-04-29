@@ -13,8 +13,8 @@ import {
 } from "../../../test-utils";
 import { useDisconnect, useSwitchNetwork } from "wagmi";
 import { useParams } from "react-router-dom";
+import { Mock } from "vitest";
 
-vi.mock("../../common/Auth");
 vi.mock("wagmi");
 
 vi.mock("@rainbow-me/rainbowkit", () => ({
@@ -31,11 +31,14 @@ Object.assign(navigator, {
 
 const mockRoundData: Round = makeRoundData();
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: vi.fn(),
-}));
-
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 vi.mock("../../api/api", () => ({
   ...vi.importActual("../../api/api"),
   useRoundMatchData: vi.fn(),

@@ -6,6 +6,11 @@
     "npm": ">=8.5.5",
     "node": ">=16.15.0"
   },
+  "pnpm": {
+    "overrides": {
+      "@gitcoinco/passport-sdk-verifier>@spruceid/didkit-wasm": "file:/Users/vacekj/Programming/didkit/lib/web/pkg"
+    }
+  },
   "scripts": {
     "start": "pnpm --filter round-manager run start",
     "build": "pnpm turbo build",

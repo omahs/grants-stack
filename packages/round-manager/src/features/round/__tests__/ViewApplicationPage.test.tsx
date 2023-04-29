@@ -57,13 +57,17 @@ const mockWallet = {
   },
 };
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: () => ({
-    id: "some-application-id",
-    roundId: "some-round-id",
-  }),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: () => ({
+      id: "some-application-id",
+      roundId: "some-round-id",
+    }),
+  };
+});
 
 const applicationIdOverride = "some-application-id";
 const roundIdOverride = "some-round-id";

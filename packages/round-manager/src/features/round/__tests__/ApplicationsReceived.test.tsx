@@ -44,12 +44,16 @@ vi.mock("../../../constants", () => ({
   ...vi.importActual("../../../constants"),
   errorModalDelayMs: 0, // NB: use smaller delay for faster tests
 }));
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: () => ({
-    id: "0x0000000000000000000000000000000000000000",
-  }),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: () => ({
+      id: "0x0000000000000000000000000000000000000000",
+    }),
+  };
+});
 const roundIdOverride = "0x0000000000000000000000000000000000000000";
 
 const grantApplications = [

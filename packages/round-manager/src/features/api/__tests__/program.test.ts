@@ -4,19 +4,30 @@ import { makeProgramData } from "../../../test-utils";
 import { fetchFromIPFS, ChainId, CHAINS } from "../utils";
 import { graphql_fetch } from "common";
 
-import { vi, Mock } from "vitest";
+import { vi, Mock, beforeEach } from "vitest";
 
-vi.mock("../utils", () => ({
-  ...vi.importActual("../utils"),
-  fetchFromIPFS: vi.fn(),
-}));
+vi.mock("../utils", async () => {
+  const mod = await vi.importActual("../utils");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    fetchFromIPFS: vi.fn(),
+  };
+});
 
-vi.mock("common", () => ({
-  ...vi.importActual("common"),
-  graphql_fetch: vi.fn(),
-}));
+vi.mock("common", async () => {
+  const mod: object = await vi.importActual("common");
+  return {
+    ...mod,
+    graphql_fetch: vi.fn(),
+  };
+});
 
 describe("listPrograms", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
   it("calls the graphql endpoint and maps the metadata from IPFS", async () => {
     // const address = "0x0"
     const expectedProgram = makeProgramData({
@@ -62,6 +73,10 @@ describe("listPrograms", () => {
 });
 
 describe("getProgramById", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
   it("calls the graphql endpoint and maps the metadata from IPFS", async () => {
     const expectedProgram = makeProgramData({
       chain: CHAINS[ChainId.GOERLI_CHAIN_ID],

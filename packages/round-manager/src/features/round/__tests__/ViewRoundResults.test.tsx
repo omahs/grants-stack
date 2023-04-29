@@ -15,12 +15,11 @@ import {
   wrapWithRoundContext,
 } from "../../../test-utils";
 import { useFetchMatchingDistributionFromContract } from "../../api/payoutStrategy/merklePayoutStrategy";
-import { setReadyForPayout } from "../../api/round";
 import { ProgressStatus, Round } from "../../api/types";
 import ViewRoundPage from "../ViewRoundPage";
 import { useRoundMatchingFunds } from "../../../hooks";
+import { Mock, vi } from "vitest";
 
-vi.mock("../../common/Auth");
 vi.mock("../../api/round");
 vi.mock("wagmi");
 
@@ -30,23 +29,36 @@ vi.mock("@rainbow-me/rainbowkit", () => ({
 
 let mockRoundData: Round = makeRoundData();
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: vi.fn(),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 
-vi.mock("../../../hooks", () => ({
-  ...vi.importActual("../../../hooks"),
-  useRoundMatchingFunds: vi.fn(),
-}));
+vi.mock("../../../hooks", async () => {
+  const mod = await vi.importActual("../../../hooks");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useRoundMatchingFunds: vi.fn(),
+  };
+});
+
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 
 vi.mock("../../api/payoutStrategy/merklePayoutStrategy", () => ({
   ...vi.importActual("../../api/payoutStrategy/merklePayoutStrategy"),
   useFetchMatchingDistributionFromContract: vi.fn(),
-}));
-
-vi.mock("../../../context/round/FinalizeRoundContext", () => ({
-  ...vi.importActual("../../../context/round/FinalizeRoundContext"),
 }));
 
 vi.mock("../../common/Auth", () => ({

@@ -8,6 +8,8 @@ import { useWallet } from "../../common/Auth";
 import * as FormWizardImport from "../../common/FormWizard";
 import { fireEvent, screen } from "@testing-library/react";
 import QuadraticFundingForm from "../QuadraticFundingForm";
+import { Mock } from "vitest";
+import { useSearchParams } from "react-router-dom";
 
 vi.mock("../../common/Navbar");
 vi.mock("../../common/Auth");
@@ -19,10 +21,17 @@ const useParamsFn = () => [
     get: () => programId,
   },
 ];
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useSearchParams: useParamsFn,
-}));
+
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useSearchParams: vi.fn(),
+  };
+});
+
+(useSearchParams as Mock).mockImplementation(useParamsFn);
 
 describe("<CreateRoundPage />", () => {
   beforeEach(() => {

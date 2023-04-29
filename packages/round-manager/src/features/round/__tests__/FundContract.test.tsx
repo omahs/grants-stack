@@ -25,8 +25,6 @@ const { TextDecoder } = require("util");
 global.TextDecoder = TextDecoder;
 
 import { vi, Mock } from "vitest";
-
-vi.mock("../../common/Auth");
 vi.mock("wagmi");
 
 vi.mock("@rainbow-me/rainbowkit", () => ({
@@ -35,10 +33,13 @@ vi.mock("@rainbow-me/rainbowkit", () => ({
 
 let mockRoundData: Round = makeRoundData();
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: vi.fn(),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod: object = await vi.importActual("react-router-dom");
+  return {
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 
 vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
@@ -48,10 +49,14 @@ vi.mock("../../common/Auth", () => ({
   }),
 }));
 
-vi.mock("../../api/utils", () => ({
-  ...vi.importActual("../../api/utils"),
-  useTokenPrice: vi.fn(),
-}));
+vi.mock("../../api/utils", async () => {
+  const mod: object = await vi.importActual("../../api/utils");
+
+  return {
+    ...mod,
+    useTokenPrice: vi.fn(),
+  };
+});
 
 describe("fund contract tab", () => {
   beforeEach(() => {

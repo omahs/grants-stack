@@ -25,15 +25,20 @@ import {
   updateApplicationStatuses,
 } from "../../api/application";
 import { ProgressStatus } from "../../api/types";
+import { Mock } from "vitest";
 
 vi.mock("../../api/application");
 vi.mock("../../api/subgraph");
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: () => ({
-    id: "some-round-id",
-  }),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: () => ({
+      id: "some-round-id",
+    }),
+  };
+});
 const roundIdOverride = "some-round-id";
 vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
@@ -75,7 +80,6 @@ const setupInBulkSelectionMode = () => {
 
 describe("<ApplicationsApproved />", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     (getApplicationsByRoundId as Mock).mockResolvedValue(grantApplications);
   });
 

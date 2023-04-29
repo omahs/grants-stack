@@ -10,15 +10,15 @@ vi.mock("../../round");
 
 vi.mock("common");
 
-vi.mock("../../../api/types", () => ({
-  ...vi.importActual("../../../api/types"),
-}));
+vi.mock("../../utils", async () => {
+  const mod = await vi.importActual<typeof React>("../../utils");
 
-vi.mock("../../utils", () => ({
-  ...vi.importActual("../../utils"),
-  graphql_fetch: vi.fn(),
-  fetchFromIPFS: vi.fn(),
-}));
+  return {
+    ...mod,
+    graphql_fetch: vi.fn(),
+    fetchFromIPFS: vi.fn(),
+  };
+});
 
 vi.mock("react-router-dom", () => ({
   ...vi.importActual("react-router-dom"),
@@ -27,11 +27,15 @@ vi.mock("react-router-dom", () => ({
   }),
 }));
 
-vi.mock("react", () => ({
-  ...vi.importActual("react"),
-  useState: vi.fn(),
-  useEffect: vi.fn(),
-}));
+vi.mock("react", async () => {
+  const mod = await vi.importActual<typeof React>("react");
+
+  return {
+    ...mod,
+    useState: vi.fn(),
+    useEffect: vi.fn(),
+  };
+});
 
 const paidProjects = [makeQFDistribution(), makeQFDistribution()];
 

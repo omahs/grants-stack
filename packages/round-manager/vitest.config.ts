@@ -1,21 +1,14 @@
 import { defineConfig } from "vitest/config";
-import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
-  plugins: [wasm(), topLevelAwait()],
+  plugins: [svgr()],
   test: {
-    environment: "happy-dom",
+    environment: "jsdom",
     globals: true,
     setupFiles: "./src/setupTests.ts",
     deps: {
-      inline: [
-        "@spruceid/didkit-wasm",
-        "viem",
-        "@spruceid",
-        "@gitcoinco/passport-sdk-verifier",
-        "@gitcoinco",
-      ],
+      inline: ["@gitcoinco/passport-sdk-verifier"],
     },
   },
 });

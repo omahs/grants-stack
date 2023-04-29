@@ -9,6 +9,7 @@ import {
   initialCreateProgramState,
 } from "../../../context/program/CreateProgramContext";
 import { MemoryRouter } from "react-router-dom";
+import { Mock, SpyInstance } from "vitest";
 
 vi.mock("../../api/ipfs");
 vi.mock("../../common/Auth");

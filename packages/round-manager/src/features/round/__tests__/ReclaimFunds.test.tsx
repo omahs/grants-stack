@@ -12,18 +12,21 @@ import { ProgressStatus, Round } from "../../api/types";
 import { useBalance, useDisconnect, useSigner, useSwitchNetwork } from "wagmi";
 import ViewRoundPage from "../ViewRoundPage";
 import { useParams } from "react-router-dom";
+import { Mock } from "vitest";
 
 vi.mock("wagmi");
-vi.mock("../../common/Auth");
 
 vi.mock("@rainbow-me/rainbowkit", () => ({
   ConnectButton: vi.fn(),
 }));
 
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: vi.fn(),
-}));
+vi.mock("react-router-dom", async () => {
+  const mod: object = await vi.importActual("react-router-dom");
+  return {
+    ...mod,
+    useParams: vi.fn(),
+  };
+});
 
 vi.mock("../../common/Auth", () => ({
   useWallet: () => ({
@@ -33,10 +36,14 @@ vi.mock("../../common/Auth", () => ({
   }),
 }));
 
-vi.mock("../../api/utils", () => ({
-  ...vi.importActual("../../api/utils"),
-  useTokenPrice: vi.fn(),
-}));
+vi.mock("../../api/utils", async () => {
+  const mod: object = await vi.importActual("../../api/utils");
+
+  return {
+    ...mod,
+    useTokenPrice: vi.fn(),
+  };
+});
 
 const chainId = "0";
 const roundId = "testRoundId";

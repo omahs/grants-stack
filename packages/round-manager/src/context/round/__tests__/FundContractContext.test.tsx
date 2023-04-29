@@ -13,7 +13,6 @@ import {
 } from "../FundContractContext";
 import { vi, Mock, SpyInstance } from "vitest";
 
-vi.mock("wagmi");
 vi.mock("../../../features/api/subgraph");
 vi.mock("../../../features/api/application");
 
@@ -22,9 +21,10 @@ const mockSigner = {
     /* do nothing.*/
   },
 };
+
 vi.mock("wagmi", () => ({
-  useSigner: () => ({ data: mockSigner }),
   ...vi.importActual("wagmi"),
+  useSigner: () => ({ data: mockSigner }),
 }));
 
 const testParams: FundContractParams = {
@@ -40,8 +40,6 @@ const testParams: FundContractParams = {
 
 describe("<FundContractProvider />", () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-
     (fundRoundContract as Mock).mockReturnValue(
       new Promise(() => {
         /* do nothing.*/

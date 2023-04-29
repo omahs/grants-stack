@@ -6,8 +6,8 @@ import {
   ReclaimFundsProvider,
   useReclaimFunds,
 } from "../ReclaimFundsContext";
+import { Mock, SpyInstance } from "vitest";
 
-vi.mock("wagmi");
 vi.mock("../../../features/api/payoutStrategy/merklePayoutStrategy");
 
 const mockSigner = {

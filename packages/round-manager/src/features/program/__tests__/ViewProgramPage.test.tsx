@@ -10,9 +10,9 @@ import {
 import { faker } from "@faker-js/faker";
 import { Program, ProgressStatus } from "../../api/types";
 import { formatUTCDateAsISOString } from "common";
+import { Mock } from "vitest";
 
 const programId = faker.datatype.number().toString();
-const useParamsFn = () => ({ id: programId });
 
 vi.mock("../../common/Navbar");
 vi.mock("../../common/Auth");
@@ -20,10 +20,15 @@ vi.mock("../../api/program");
 vi.mock("@rainbow-me/rainbowkit", () => ({
   ConnectButton: vi.fn(),
 }));
-vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom"),
-  useParams: useParamsFn,
-}));
+
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    // @ts-expect-error mod
+    ...mod,
+    useParams: () => ({ id: programId }),
+  };
+});
 
 describe("<ViewProgram />", () => {
   let stubProgram: Program;
