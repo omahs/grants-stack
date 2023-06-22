@@ -32,6 +32,8 @@ import PassportBanner from "../common/PassportBanner";
 import { ProjectBanner } from "../common/ProjectBanner";
 import RoundEndedBanner from "../common/RoundEndedBanner";
 import Breadcrumb, { BreadcrumbItem } from "../common/Breadcrumb";
+import { linearQF } from "pluralistic";
+import { MatchingEstimations } from "../common/MatchingEstimations";
 
 const CalendarIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -547,6 +549,13 @@ export function ProjectStats() {
         "rounded bg-gray-50 mb-4 p-4 gap-4 grid grid-cols-3 md:flex md:flex-col"
       }
     >
+      {projectToRender && (
+        <MatchingEstimations
+          projectId={projectToRender.grantApplicationId}
+          roundId={roundId as string}
+          recipient={projectToRender.recipient}
+        />
+      )}
       <div>
         <h3>${application?.amountUSD.toFixed(2) ?? "-"}</h3>
         <p>funding received in current round</p>
