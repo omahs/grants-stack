@@ -5,7 +5,8 @@ import { Signer } from "@ethersproject/abstract-signer";
 import { Web3Provider } from "@ethersproject/providers";
 import { VerifiableCredential } from "@gitcoinco/passport-sdk-types";
 import { BigNumber } from "ethers";
-import { SchemaQuestion } from "./utils";
+
+import { SchemaQuestion } from "../round/RoundApplicationForm/ApplicationQuestions";
 
 export type Network = "goerli" | "optimism";
 

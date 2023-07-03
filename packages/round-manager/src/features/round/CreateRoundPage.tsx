@@ -8,7 +8,7 @@ import Footer from "common/src/components/Footer";
 import { FormWizard } from "../common/FormWizard";
 import Navbar from "../common/Navbar";
 import ApplicationEligibilityForm from "./ApplicationEligibilityForm";
-import { RoundApplicationForm } from "./RoundApplicationForm";
+import { RoundApplicationForm } from "./RoundApplicationForm/RoundApplicationForm";
 import { RoundDetailForm } from "./RoundDetailForm";
 import QuadraticFundingForm from "./QuadraticFundingForm";
 

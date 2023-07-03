@@ -3,7 +3,7 @@ import { makeProgramData, renderWithProgramContext } from "../../../test-utils";
 import { faker } from "@faker-js/faker";
 import { RoundDetailForm } from "../RoundDetailForm";
 import ApplicationEligibilityForm from "../ApplicationEligibilityForm";
-import { RoundApplicationForm } from "../RoundApplicationForm";
+import { RoundApplicationForm } from "../RoundApplicationForm/RoundApplicationForm";
 import { useWallet } from "../../common/Auth";
 import * as FormWizardImport from "../../common/FormWizard";
 import { fireEvent, screen } from "@testing-library/react";

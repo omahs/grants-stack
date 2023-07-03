@@ -4,10 +4,11 @@ import { ChevronDownIcon, PlusIcon, XCircleIcon } from "@heroicons/react/solid";
 import { Button } from "common/src/styles";
 import { Fragment, useEffect, useState } from "react";
 import { EditQuestion, InputType } from "../api/types";
-import { SchemaQuestion, typeToText } from "../api/utils";
+import { typeToText } from "../api/utils";
 import BaseSwitch from "./BaseSwitch";
 import { InputIcon } from "./InputIcon";
 import Option from "./Option";
+import { SchemaQuestion } from "../round/RoundApplicationForm/ApplicationQuestions";
 
 const INITIAL_VALUE = "Select a type";
 

@@ -3,11 +3,11 @@ import { BigNumber, ethers } from "ethers";
 import {
   ApplicationMetadata,
   IPFSObject,
-  InputType,
   MatchingStatsData,
   Program,
 } from "./types";
 import { ChainId, RedstoneTokenIds } from "common";
+import { SchemaQuestion } from "../round/RoundApplicationForm/ApplicationQuestions";
 
 // NB: number keys are coerced into strings for JS object keys
 export const CHAINS: Record<number, Program["chain"]> = {
@@ -374,16 +374,6 @@ export const pinToIPFS = (obj: IPFSObject): Promise<{ IpfsHash: string }> => {
 
 export const abbreviateAddress = (address: string) =>
   `${address.slice(0, 8)}...${address.slice(-4)}`;
-
-export interface SchemaQuestion {
-  id: number;
-  title: string;
-  type: InputType;
-  required: boolean;
-  hidden: boolean;
-  choices?: string[];
-  encrypted: boolean;
-}
 
 export interface ProjectRequirementsSchema {
   twitter: {

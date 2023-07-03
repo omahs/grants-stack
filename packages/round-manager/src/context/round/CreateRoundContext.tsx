@@ -14,11 +14,11 @@ import { saveToIPFS } from "../../features/api/ipfs";
 import { useWallet } from "../../features/common/Auth";
 import { deployRoundContract } from "../../features/api/round";
 import { waitForSubgraphSyncTo } from "../../features/api/subgraph";
-import { SchemaQuestion } from "../../features/api/utils";
 import { datadogLogs } from "@datadog/browser-logs";
 import { Signer } from "@ethersproject/abstract-signer";
 import { deployQFVotingContract } from "../../features/api/votingStrategy/qfVotingStrategy";
 import { deployMerklePayoutStrategyContract } from "../../features/api/payoutStrategy/merklePayoutStrategy";
+import { SchemaQuestion } from "../../features/round/RoundApplicationForm/ApplicationQuestions";
 
 type SetStatusFn = React.Dispatch<SetStateAction<ProgressStatus>>;
 
@@ -139,10 +139,14 @@ const _createRound = async ({
   try {
     datadogLogs.logger.info(`_createRound: ${round}`);
 
-    if (roundMetadataWithProgramContractAddress && roundMetadataWithProgramContractAddress.eligibility) {
-      roundMetadataWithProgramContractAddress.eligibility.requirements = roundMetadataWithProgramContractAddress.eligibility?.requirements.filter(
-        obj => obj.requirement != ""
-      );
+    if (
+      roundMetadataWithProgramContractAddress &&
+      roundMetadataWithProgramContractAddress.eligibility
+    ) {
+      roundMetadataWithProgramContractAddress.eligibility.requirements =
+        roundMetadataWithProgramContractAddress.eligibility?.requirements.filter(
+          (obj) => obj.requirement != ""
+        );
     }
 
     const { roundMetadataIpfsHash, applicationSchemaIpfsHash } =
